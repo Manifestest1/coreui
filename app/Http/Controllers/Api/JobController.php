@@ -38,6 +38,7 @@ class JobController extends Controller
         $jobpost->user_id = $userid;
         $jobpost->save();
         return response()->json($jobpost);
+        echo 'in';
     }
 
     public function jobGetonEmployee()
