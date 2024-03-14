@@ -168,7 +168,6 @@ class AuthController extends Controller
         $user->phone = $request->phone;
         $user->update();
         return response()->json($user);
-        
     }
 
     public function createProfile(Request $request)
@@ -184,7 +183,7 @@ class AuthController extends Controller
             $user->role_id = 2;
         }
         $user->update();
-        return response()->json($user);
+        return response()->json($user); 
     }
 
     public function publicProfileOfEmployee($id)

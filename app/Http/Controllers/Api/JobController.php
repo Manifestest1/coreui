@@ -60,7 +60,7 @@ class JobController extends Controller
     {
         $query = JobPost::query();
 
-        if ($request->has('keyword')) 
+        if ($request->has('keyword'))  
         {
             $query->where('title', 'like', '%' . $request->input('keyword') . '%')
                   ->orWhere('location', 'like', '%' . $request->input('keyword') . '%')

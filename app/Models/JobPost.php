@@ -2,8 +2,9 @@
 
 namespace App\Models; 
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory; 
 use Illuminate\Database\Eloquent\Model; 
+use App\Models\User;
 
 class JobPost extends Model
 {
@@ -16,7 +17,7 @@ class JobPost extends Model
         'user_id'
     ];
 
-    public function users()
+    public function users() 
     {
         return $this->belongsToMany(User::class,'job_post_user','job_post_id','employee_id');
     }
