@@ -23,7 +23,24 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password',
         'google_id',
+        'phone',
         'imageurl',
+        'current_address',
+        'permanent_address',
+        'adhar_card_no',
+        'qualification',
+        'certifications',
+        'skills',
+        'working_from',
+        'work_experience',
+        'current_working_skill',
+        'languages',
+        'hobbies',
+        'marital_status',
+        'city',
+        'state',
+        'country',
+        'pincode'
     ];
 
     /**

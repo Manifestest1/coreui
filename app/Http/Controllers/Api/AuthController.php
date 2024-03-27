@@ -130,7 +130,7 @@ class AuthController extends Controller
      */
     public function logout() 
     {
-        auth()->logout();
+        Auth::logout();
         return response()->json(['message' => 'User successfully signed out']);
     }
     /**
@@ -153,6 +153,7 @@ class AuthController extends Controller
     }
     public function updateProfile(Request $request) 
     {
+        // return response()->json($request->all());
         $userid = Auth::user()->id;
         $user = User::find($userid);
         if($request->imageurl != '' || $request->imageurl != null)
@@ -166,6 +167,21 @@ class AuthController extends Controller
         // return $request->profilePicture;
         $user->name = $request->name;
         $user->phone = $request->phone;
+        $user->current_address = $request->current_address;
+        $user->permanent_address = $request->permanent_address;
+        $user->adhar_card_no = $request->adhar_card_no;
+        $user->qualification = $request->qualification;
+        $user->certifications = $request->certifications;
+        $user->skills = $request->skills;
+        $user->working_from = $request->working_from;
+        $user->work_experience = $request->work_experience;
+        $user->current_working_skill = $request->current_working_skill;
+        $user->languages = $request->languages;
+        $user->hobbies = $request->hobbies;
+        $user->city = $request->city;
+        $user->state = $request->state;
+        $user->country = $request->country;
+        $user->pincode = $request->pincode;
         $user->update();
         return response()->json($user);
     }
@@ -174,7 +190,7 @@ class AuthController extends Controller
     {
         $userid = Auth::user()->id;
         $user = User::find($userid);
-        if($request->role == 'employee')
+        if($request->role == 1)
         {
             $user->role_id = 1;
         }
