@@ -63,8 +63,7 @@ class JobController extends Controller
         if ($request->has('keyword'))  
         {
             $query->where('title', 'like', '%' . $request->input('keyword') . '%')
-                  ->orWhere('location', 'like', '%' . $request->input('keyword') . '%')
-                  ->orWhere('description', 'like', '%' . $request->input('keyword') . '%');
+                  ->orWhere('location', 'like', '%' . $request->input('keyword') . '%');
         }
     
         $results = $query->get();
