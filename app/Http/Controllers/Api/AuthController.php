@@ -54,13 +54,13 @@ class AuthController extends Controller
                 {
                     return response()->json([
                         'status' => 400,
-                        'message' => 'Unauthorized',
+                        'message' => 'Unauthorized', 
                     ], 401);
                 }
         
                 return response()->json([
                     'status' => 'success',
-                    'user' => $user,
+                    'user' => $save_user,
                     'authorisation' => [
                         'token' => $token,
                         'type' => 'bearer',
@@ -156,6 +156,7 @@ class AuthController extends Controller
         // return response()->json($request->all());
         $userid = Auth::user()->id;
         $user = User::find($userid);
+
         if($request->imageurl != '' || $request->imageurl != null)
         {
             $uploadedFile = $request->file('imageurl');
@@ -164,27 +165,105 @@ class AuthController extends Controller
             $uploadedFile->move($destinationPath, $filename);
             $user->imageurl = asset('uploads/' . $filename);
         }
-        // return $request->profilePicture;
-        $user->name = $request->name;
-        $user->phone = $request->phone;
-        $user->current_address = $request->current_address;
-        $user->permanent_address = $request->permanent_address;
-        $user->adhar_card_no = $request->adhar_card_no;
-        $user->qualification = $request->qualification;
-        $user->certifications = $request->certifications;
-        $user->skills = $request->skills;
-        $user->working_from = $request->working_from;
-        $user->work_experience = $request->work_experience;
-        $user->current_working_skill = $request->current_working_skill;
-        $user->languages = $request->languages;
-        $user->hobbies = $request->hobbies;
-        $user->city = $request->city;
-        $user->state = $request->state;
-        $user->country = $request->country;
-        $user->pincode = $request->pincode;
+        if (!empty($request->name)) {
+            // Update the name
+            $user->name = $request->name;
+        }
+        if(!empty($request->phone))
+        {
+            $user->phone = $request->phone;
+        }
+        if(!empty($request->current_address))
+        {
+            $user->current_address = $request->current_address;
+        }
+        if($request->permanent_address != '' || $request->permanent_address != null)
+        {
+            $user->permanent_address = $request->permanent_address;
+        }
+        if($request->adhar_card_no != '' || $request->adhar_card_no != null)
+        {
+            $user->adhar_card_no = $request->adhar_card_no;
+        }
+        if($request->qualification != '' || $request->qualification != null)
+        {
+            $user->qualification = $request->qualification;
+        }
+        if($request->certifications != '' || $request->certifications != null)
+        {
+            $user->certifications = $request->certifications;
+        }
+        if($request->skills != '' || $request->skills != null)
+        {
+            $user->skills = $request->skills;
+        }
+        if($request->working_from != '' || $request->working_from != null)
+        {
+            $user->working_from = $request->working_from;
+        }
+        if($request->work_experience != '' || $request->work_experience != null)
+        {
+            $user->work_experience = $request->work_experience;
+        }
+        if($request->current_working_skill != '' || $request->current_working_skill != null)
+        {
+            $user->current_working_skill = $request->current_working_skill;
+        }
+        if($request->languages != '' || $request->languages != null)
+        {
+            $user->languages = $request->languages;
+        }
+        if($request->hobbies != '' || $request->hobbies != null)
+        {
+            $user->hobbies = $request->hobbies;
+        }
+        if($request->city != '' || $request->city != null)
+        {
+            $user->city = $request->city;
+        }
+        if($request->state != '' || $request->state != null)
+        {
+            $user->state = $request->state;
+        }
+        if($request->country != '' || $request->country != null)
+        {
+            $user->country = $request->country;
+        }
+        if($request->pincode != '' || $request->pincode != null)
+        {
+            $user->pincode = $request->pincode;
+        }
+       
         $user->update();
         return response()->json($user);
     }
+
+    public function updateEmployeeProfile(Request $request) 
+    {
+        $userId = Auth::id(); // Get the authenticated user's ID
+
+        // Update the user's attributes
+        User::where('id', $userId)->update([
+            'name' => $request->name,
+            // other user attributes
+        ]);
+
+        // Retrieve the user model instance
+        $user = User::find($userId);
+
+        // Update the employee attributes if the user has an associated employee
+        if ($user) 
+        {
+            $user->employee()->update([
+                'phone' => $request->phone,
+                // other employee attributes
+            ]);
+        }
+
+        return response()->json($user);
+
+    }
+
 
     public function createProfile(Request $request)
     {
@@ -192,6 +271,10 @@ class AuthController extends Controller
         $user = User::find($userid);
         if($request->role == 1)
         {
+            $user->employee()->create([
+                    'employee_id' => $userid,
+            ]);
+            
             $user->role_id = 1;
         }
         else

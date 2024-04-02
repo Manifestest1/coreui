@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Models\JobPost;
+use App\Models\Employee;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -18,13 +19,13 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array<int, string>
      */
-    protected $fillable = [
+    protected $fillable = [ 
         'name',
         'email',
         'password',
         'google_id',
-        'phone',
         'imageurl',
+        'phone',
         'current_address',
         'permanent_address',
         'adhar_card_no',
@@ -80,5 +81,10 @@ class User extends Authenticatable implements JWTSubject
     public function jobPosts()
     {
         return $this->belongsToMany(JobPost::class,'job_post_user','employee_id','job_post_id');
+    }
+
+    public function employee()
+    {
+        return $this->hasOne(Employee::class,'employee_id','id'); 
     }
 }

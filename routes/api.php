@@ -25,6 +25,7 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
     Route::get('/user-profile', [AuthController::class, 'userProfile']);    
     Route::post('/update-profile', [AuthController::class, 'updateProfile']);   
     Route::post('/create-profile', [AuthController::class, 'createProfile']);
+    Route::post('/update-employee-profile', [AuthController::class, 'updateEmployeeProfile']);   
     Route::get('/public-profile-employee/{id}', [AuthController::class, 'publicProfileOfEmployee']);  
 
     // Job Url
