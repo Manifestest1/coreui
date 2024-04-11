@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Employee;
+use App\Models\Employer;
 use App\Models\JobPost;
 use Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -78,8 +80,18 @@ class AuthController extends Controller
                         'message' => 'Unauthorized',
                     ], 401);
                 }
-        
-                $user = Auth::user();
+                
+                $authuser = Auth::user();
+                // $userId = Auth::id();
+                if($authuser->role_id == 1)
+                {
+                    $user = User::with('employee')->find($authuser->id);
+                }
+                else
+                {
+                    $user = User::with('employer')->find($authuser->id);
+                }
+                
         
                 return response()->json([
                     'status' => 'success',
@@ -124,16 +136,6 @@ class AuthController extends Controller
     }
 
     /**
-     * Log the user out (Invalidate the token).
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function logout() 
-    {
-        Auth::logout();
-        return response()->json(['message' => 'User successfully signed out']);
-    }
-    /**
      * Refresh a token.
      *
      * @return \Illuminate\Http\JsonResponse
@@ -147,94 +149,64 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
+
+     public function createProfile(Request $request)
+     {
+         $userid = Auth::user()->id;
+         $user = User::find($userid);
+         if($request->role == 1)
+         {
+             $user->employee()->create([
+                     'employee_id' => $userid,
+             ]);
+             
+             $user->role_id = 1;
+         }
+         else
+         {
+             $user->employer()->create([
+                 'employer_id' => $userid,
+             ]);
+             $user->role_id = 2;
+         }
+         $user->update();
+         return response()->json($user); 
+     }
+
     public function userProfile() 
     {
         return response()->json(auth()->user());
     }
+
     public function updateProfile(Request $request) 
     {
-        // return response()->json($request->all());
         $userid = Auth::user()->id;
         $user = User::find($userid);
 
         if($request->imageurl != '' || $request->imageurl != null)
         {
+            // $path = url('/').'/uploads/';
             $uploadedFile = $request->file('imageurl');
             $filename = time() . '_' . $uploadedFile->getClientOriginalName();
             $destinationPath = public_path() . '/uploads';
             $uploadedFile->move($destinationPath, $filename);
             $user->imageurl = asset('uploads/' . $filename);
+            // $user->imageurl = $filename;
         }
-        if (!empty($request->name)) {
-            // Update the name
-            $user->name = $request->name;
-        }
-        if(!empty($request->phone))
+
+
+        if($user->role_id == 1)
         {
-            $user->phone = $request->phone;
+            $user->update();
+            $user = User::with('employee')->find($userid);
         }
-        if(!empty($request->current_address))
+        else
         {
-            $user->current_address = $request->current_address;
-        }
-        if($request->permanent_address != '' || $request->permanent_address != null)
-        {
-            $user->permanent_address = $request->permanent_address;
-        }
-        if($request->adhar_card_no != '' || $request->adhar_card_no != null)
-        {
-            $user->adhar_card_no = $request->adhar_card_no;
-        }
-        if($request->qualification != '' || $request->qualification != null)
-        {
-            $user->qualification = $request->qualification;
-        }
-        if($request->certifications != '' || $request->certifications != null)
-        {
-            $user->certifications = $request->certifications;
-        }
-        if($request->skills != '' || $request->skills != null)
-        {
-            $user->skills = $request->skills;
-        }
-        if($request->working_from != '' || $request->working_from != null)
-        {
-            $user->working_from = $request->working_from;
-        }
-        if($request->work_experience != '' || $request->work_experience != null)
-        {
-            $user->work_experience = $request->work_experience;
-        }
-        if($request->current_working_skill != '' || $request->current_working_skill != null)
-        {
-            $user->current_working_skill = $request->current_working_skill;
-        }
-        if($request->languages != '' || $request->languages != null)
-        {
-            $user->languages = $request->languages;
-        }
-        if($request->hobbies != '' || $request->hobbies != null)
-        {
-            $user->hobbies = $request->hobbies;
-        }
-        if($request->city != '' || $request->city != null)
-        {
-            $user->city = $request->city;
-        }
-        if($request->state != '' || $request->state != null)
-        {
-            $user->state = $request->state;
-        }
-        if($request->country != '' || $request->country != null)
-        {
-            $user->country = $request->country;
-        }
-        if($request->pincode != '' || $request->pincode != null)
-        {
-            $user->pincode = $request->pincode;
+            $user->update();
+            $user = User::with('employer')->find($userid);
         }
        
-        $user->update();
+        
         return response()->json($user);
     }
 
@@ -244,8 +216,7 @@ class AuthController extends Controller
 
         // Update the user's attributes
         User::where('id', $userId)->update([
-            'name' => $request->name,
-            // other user attributes
+            'name' => $request->name
         ]);
 
         // Retrieve the user model instance
@@ -255,34 +226,71 @@ class AuthController extends Controller
         if ($user) 
         {
             $user->employee()->update([
+                'marital_status' => $request->marital_status,
                 'phone' => $request->phone,
-                // other employee attributes
+                'current_address' => $request->current_address,
+                'permanent_address' => $request->permanent_address,
+                'adhar_card_no' => $request->adhar_card_no,
+                'qualification' => $request->qualification,
+                'certifications' => $request->certifications,
+                'skills' => $request->skills,
+                'working_from' => $request->working_from,
+                'work_experience' => $request->work_experience,
+                'current_working_skill' => $request->current_working_skill,
+                'languages' => $request->languages,
+                'hobbies' => $request->hobbies,
+                'city' => $request->city,
+                'state' => $request->state,
+                'country' => $request->country,
+                'pincode' => $request->pincode
             ]);
         }
+
+        $user = User::with('employee')->find($userId);
 
         return response()->json($user);
 
     }
 
-
-    public function createProfile(Request $request)
+    public function updateEmployerProfile(Request $request) 
     {
-        $userid = Auth::user()->id;
-        $user = User::find($userid);
-        if($request->role == 1)
+        $userId = Auth::id(); // Get the authenticated user's ID
+
+        // Update the user's attributes
+        User::where('id', $userId)->update([
+            'name' => $request->name
+        ]);
+
+        // Retrieve the user model instance
+        $user = User::find($userId);
+
+        // Update the employee attributes if the user has an associated employee
+        if ($user) 
         {
-            $user->employee()->create([
-                    'employee_id' => $userid,
+            $user->employer()->update([
+                'phone' => $request->phone,
+                'current_address' => $request->current_address,
+                'permanent_address' => $request->permanent_address,
+                'adhar_card_no' => $request->adhar_card_no,
+                'qualification' => $request->qualification,
+                'certifications' => $request->certifications,
+                'skills' => $request->skills,
+                'working_from' => $request->working_from,
+                'work_experience' => $request->work_experience,
+                'current_working_skill' => $request->current_working_skill,
+                'languages' => $request->languages,
+                'hobbies' => $request->hobbies,
+                'city' => $request->city,
+                'state' => $request->state,
+                'country' => $request->country,
+                'pincode' => $request->pincode
             ]);
-            
-            $user->role_id = 1;
         }
-        else
-        {
-            $user->role_id = 2;
-        }
-        $user->update();
-        return response()->json($user); 
+
+        $user = User::with('employer')->find($userId);
+
+        return response()->json($user);
+
     }
 
     public function publicProfileOfEmployee($id)
@@ -304,5 +312,16 @@ class AuthController extends Controller
             'token_type' => 'bearer',
             'user' => auth()->user()
         ]);
+    }
+
+      /**
+     * Log the user out (Invalidate the token).
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout() 
+    {
+        Auth::logout();
+        return response()->json(['message' => 'User successfully signed out']);
     }
 }

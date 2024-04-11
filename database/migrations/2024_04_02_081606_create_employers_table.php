@@ -13,6 +13,30 @@ return new class extends Migration
     {
         Schema::create('employers', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('employer_id');
+            $table->string('phone')->nullable();
+            $table->string('current_address')->nullable();
+            $table->string('permanent_address')->nullable();
+            $table->string('adhar_card_no')->nullable();
+
+            $table->string('qualification')->nullable();
+            $table->string('certifications')->nullable();
+            $table->string('skills')->nullable();
+            $table->string('working_from')->nullable();
+            $table->string('work_experience')->nullable();
+            $table->string('current_working_skill')->nullable();
+            $table->string('languages')->nullable();
+            $table->string('hobbies')->nullable();
+            $table->unsignedTinyInteger('marital_status')->nullable();
+
+            $table->string('city')->nullable(); 
+            $table->string('state')->nullable();
+            $table->string('country')->nullable();
+            $table->string('pincode')->nullable();
+
+            $table->foreign('employer_id')->references('id')->on('users')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

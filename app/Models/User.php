@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Models\JobPost;
 use App\Models\Employee;
+use App\Models\Employer;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -24,24 +25,7 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password',
         'google_id',
-        'imageurl',
-        'phone',
-        'current_address',
-        'permanent_address',
-        'adhar_card_no',
-        'qualification',
-        'certifications',
-        'skills',
-        'working_from',
-        'work_experience',
-        'current_working_skill',
-        'languages',
-        'hobbies',
-        'marital_status',
-        'city',
-        'state',
-        'country',
-        'pincode'
+        'imageurl'
     ];
 
     /**
@@ -86,5 +70,10 @@ class User extends Authenticatable implements JWTSubject
     public function employee()
     {
         return $this->hasOne(Employee::class,'employee_id','id'); 
+    }
+
+    public function employer()
+    {
+        return $this->hasOne(Employer::class,'employer_id','id'); 
     }
 }

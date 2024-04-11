@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('hobbies')->nullable();
             $table->unsignedTinyInteger('marital_status')->nullable();
 
-            $table->string('city')->nullable();
+            $table->string('city')->nullable(); 
             $table->string('state')->nullable();
             $table->string('country')->nullable();
             $table->string('pincode')->nullable();
