@@ -22,7 +22,7 @@ class AuthController extends Controller
      */
     public function __construct() 
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register','loginForSuperadmin']]);
     }
     /**
      * Get a JWT via given credentials.
@@ -109,6 +109,44 @@ class AuthController extends Controller
             return $e->getMessage();
         }
     }
+
+    // Start Login For Super Admin 
+
+    public function loginForSuperadmin(Request $request) 
+    {
+        try
+        {
+           
+            $credentials = $request->only('email','password');
+
+                if (!$token = JWTAuth::attempt($credentials)) 
+                {
+                    return response()->json([
+                        'status' => 400,
+                        'message' => 'Unauthorized',
+                    ], 401);
+                }
+        
+                $user = Auth::user();
+        
+                return response()->json([
+                    'status' => 'success',
+                    'user' => $user,
+                    'authorisation' => [
+                        'token' => $token,
+                        'type' => 'bearer',
+                    ],
+                ]);
+
+        } 
+        catch (Exception $e) 
+        {
+            return $e->getMessage();
+        }
+    }
+
+    // End Login For Super Admin
+
     /**
      * Register a User.
      *
@@ -171,6 +209,7 @@ class AuthController extends Controller
              ]);
              $user->role_id = 2;
              $user->update();
+             $user = User::find($userid);
          }
        
          return response()->json($user); 
