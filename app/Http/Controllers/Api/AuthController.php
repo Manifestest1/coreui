@@ -150,7 +150,7 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-     public function createProfile(Request $request)
+     public function createProfile(Request $request) 
      {
          $userid = Auth::user()->id;
          $user = User::find($userid);
@@ -161,6 +161,8 @@ class AuthController extends Controller
              ]);
              
              $user->role_id = 1;
+             $user->update();
+             $user = User::with('employee')->find($userid);
          }
          else
          {
@@ -168,8 +170,9 @@ class AuthController extends Controller
                  'employer_id' => $userid,
              ]);
              $user->role_id = 2;
+             $user->update();
          }
-         $user->update();
+       
          return response()->json($user); 
      }
 
