@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\JobController;  
+use App\Http\Controllers\Api\ContactController;  
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,7 @@ use App\Http\Controllers\Api\JobController;
 Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) 
 {
     Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login-superadmin', [AuthController::class, 'loginForSuperadmin']);
     Route::post('/register', [AuthController::class, 'register']); 
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh-token', [AuthController::class, 'refresh']);
@@ -36,6 +38,8 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
     Route::get('/job-view/{id}', [JobController::class, 'jobViewOnEmployee']);    
     Route::get('/job-apply/{id}', [JobController::class, 'jobApplyOnEmployee']);  
     Route::get('/job-get-employer', [JobController::class, 'jobGetonEmployer']);
-    Route::get('/job-view-employer/{id}', [JobController::class, 'jobViewOnEmployer']);     
+    Route::get('/job-view-employer/{id}', [JobController::class, 'jobViewOnEmployer']); 
+    
+    Route::post('/create-contact', [ContactController::class, 'createContact']);
       
 });
