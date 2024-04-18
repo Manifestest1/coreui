@@ -9,7 +9,8 @@ use App\Models\Contact;
 class ContactController extends Controller
 {
     public function createContact(Request $request)
-    {
+    {   
+        
         $contact = new Contact();
         $contact->name = $request->name;
         $contact->email = $request->email;
