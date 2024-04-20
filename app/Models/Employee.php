@@ -28,7 +28,9 @@ class Employee extends Model
         'city',
         'state',
         'country',
-        'pincode'
+        'pincode',
+        'gender',
+        
     ];
 
     public function user()

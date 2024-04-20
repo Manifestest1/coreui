@@ -12,6 +12,10 @@ use App\Models\JobPost;
 use Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Country;
+use App\Models\State;
+use App\Models\City;
+
 
 class AuthController extends Controller
 {
@@ -252,6 +256,25 @@ class AuthController extends Controller
         return response()->json($user);
     }
 
+    public function getCountries()
+    {
+        $data = Country::all();
+        return response()->json($data);
+    }
+
+    public function getStates($id)
+    {
+        $statedata = State::all();
+        return response()->json($statedata);
+    }
+
+    public function getCity($id)
+    {
+        $statedata = City::all();
+        return response()->json($statedata);
+    }
+    
+
     public function updateEmployeeProfile(Request $request) 
     {
         $userId = Auth::id(); // Get the authenticated user's ID
@@ -284,7 +307,10 @@ class AuthController extends Controller
                 'city' => $request->city,
                 'state' => $request->state,
                 'country' => $request->country,
-                'pincode' => $request->pincode
+                'pincode' => $request->pincode,
+                'gender' => $request->gender,
+
+                
             ]);
         }
 

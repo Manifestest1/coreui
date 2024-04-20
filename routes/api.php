@@ -29,7 +29,13 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
     Route::post('/create-profile', [AuthController::class, 'createProfile']);
     Route::post('/update-employee-profile', [AuthController::class, 'updateEmployeeProfile']);  
     Route::post('/update-employer-profile', [AuthController::class, 'updateEmployerProfile']);  
-    Route::get('/public-profile-employee/{id}', [AuthController::class, 'publicProfileOfEmployee']);  
+    Route::get('/public-profile-employee/{id}', [AuthController::class, 'publicProfileOfEmployee']); 
+    
+    Route::get('/get-country', [AuthController::class, 'getCountries']); 
+    Route::get('/get-state/{id}', [AuthController::class, 'getStates']); 
+    Route::get('/get-city/{id}', [AuthController::class, 'getCity']); 
+    
+
 
     // Job Url
     Route::post('/create-jobpost', [JobController::class, 'createJobPost']);
@@ -39,6 +45,8 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
     Route::get('/job-apply/{id}', [JobController::class, 'jobApplyOnEmployee']);  
     Route::get('/job-get-employer', [JobController::class, 'jobGetonEmployer']);
     Route::get('/job-view-employer/{id}', [JobController::class, 'jobViewOnEmployer']); 
+
+    
     
     Route::post('/create-contact', [ContactController::class, 'createContact']);
       
