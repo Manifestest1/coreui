@@ -32,7 +32,7 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
     Route::get('/public-profile-employee/{id}', [AuthController::class, 'publicProfileOfEmployee']); 
     
     Route::get('/get-country', [AuthController::class, 'getCountries']); 
-    Route::get('/get-state/{id}', [AuthController::class, 'getStates']); 
+    Route::get('/get-state/{countryId}', [AuthController::class, 'getStates']); 
     Route::get('/get-city/{id}', [AuthController::class, 'getCity']); 
     
 

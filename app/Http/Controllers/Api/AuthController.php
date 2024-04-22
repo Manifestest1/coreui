@@ -253,22 +253,23 @@ class AuthController extends Controller
         }
        
         
-        return response()->json($user);
+        return response()->json($user); 
     }
 
     public function getCountries()
     {
+    
         $data = Country::all();
         return response()->json($data);
     }
 
-    public function getStates($id)
+    public function getStates()
     {
         $statedata = State::all();
         return response()->json($statedata);
     }
 
-    public function getCity($id)
+    public function getCity()
     {
         $statedata = City::all();
         return response()->json($statedata);
