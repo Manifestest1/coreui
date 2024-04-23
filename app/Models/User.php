@@ -62,9 +62,14 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }   
     
-    public function jobPosts()
+    public function jobPosts() 
     {
         return $this->belongsToMany(JobPost::class,'job_post_user','employee_id','job_post_id');
+    }
+
+    public function jobFavouriteFun() 
+    {
+        return $this->belongsToMany(JobPost::class,'user_fav_job','user_id','job_id');
     }
 
     public function employee()

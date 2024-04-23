@@ -40,7 +40,7 @@ class JobController extends Controller
         return response()->json($jobpost);
     }
 
-    public function jobGetonEmployee()
+    public function jobGetonEmployee() 
     {
         $userid = Auth::user()->id;
         $user = User::find($userid);
@@ -92,6 +92,33 @@ class JobController extends Controller
         $jobPost = JobPost::find($id);
         $user->jobPosts()->attach($jobPost->id);
         return response()->json($jobPost);
+    }
+
+    public function favJobEmployee($id)
+    {
+        $userid = Auth::user()->id;
+        $user = User::find($userid);
+        $favjobpost = JobPost::find($id);
+        // $user->jobFavouriteFun()->attach($favjobpost->id);
+        // return response()->json($favjobpost);
+
+        if ($user->jobFavouriteFun()->where('job_id', $favjobpost->id)->exists()) 
+        {
+            if($user->jobFavouriteFun()->where('job_like', 1)->exists())
+            {
+                $user->jobFavouriteFun()->updateExistingPivot($favjobpost->id, ['job_like' => 0]);
+            }
+            else
+            {
+                $user->jobFavouriteFun()->updateExistingPivot($favjobpost->id, ['job_like' => 1]);
+            }
+           
+        } 
+        else 
+        {
+            $user->jobFavouriteFun()->attach($favjobpost->id, ['job_like'=> 1]);
+        }
+        return response()->json($favjobpost);
     }
 
 }

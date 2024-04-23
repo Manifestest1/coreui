@@ -21,4 +21,9 @@ class JobPost extends Model
     {
         return $this->belongsToMany(User::class,'job_post_user','job_post_id','employee_id');
     }
+
+    public function usersJobFavourite() 
+    {
+        return $this->belongsToMany(User::class,'user_fav_job','job_post_id','employee_id');
+    }
 }
