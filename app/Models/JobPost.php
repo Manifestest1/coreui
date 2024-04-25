@@ -1,29 +1,29 @@
 <?php
 
-namespace App\Models; 
+namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory; 
-use Illuminate\Database\Eloquent\Model; 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 
 class JobPost extends Model
 {
     use HasFactory;
 
-    protected $fillable = [ 
+    protected $fillable = [
         'title',
         'description',
         'location',
         'user_id'
     ];
 
-    public function users() 
+    public function users()
     {
-        return $this->belongsToMany(User::class,'job_post_user','job_post_id','employee_id');
+        return $this->belongsToMany(User::class, 'job_post_user', 'job_post_id', 'employee_id');
     }
 
-    public function usersJobFavourite() 
+    public function usersJobFavourite()
     {
-        return $this->belongsToMany(User::class,'fav_job','job_id','user_id');
+        return $this->belongsToMany(User::class, 'fav_job', 'job_id', 'user_id');
     }
 }

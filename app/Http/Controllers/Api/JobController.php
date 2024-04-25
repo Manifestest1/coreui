@@ -116,14 +116,6 @@ class JobController extends Controller
         return response()->json($userFavJob);
     }
 
-    public function UsergetFavoriteJobs($id)
-{
-    
-    $jobPost = JobPost::find($id);
-    $jobPostUsers = $jobPost->users;
-    
-    return response()->json($jobPostUsers);
-}
-
+   
 
 }
