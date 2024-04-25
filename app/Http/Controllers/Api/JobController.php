@@ -95,6 +95,7 @@ class JobController extends Controller
         return response()->json($jobPost);
     }
 
+    
     public function favJobEmployee($id)
     {
         $userid = Auth::user()->id;
@@ -103,21 +104,12 @@ class JobController extends Controller
 
         if ($user->jobFavouriteFun()->where('job_id', $favjobpost->id)->exists()) 
         {
-            $liked = $user->jobFavouriteFun()->where('job_id', $favjobpost->id)->where('job_like', 1)->exists();
-            $disliked = $user->jobFavouriteFun()->where('job_id', $favjobpost->id)->where('job_like', 0)->exists();
+            $user->jobFavouriteFun()->delete($favjobpost->id);
         
-            if ($liked) 
-            {
-                $user->jobFavouriteFun()->updateExistingPivot($favjobpost->id, ['job_like' => 0]);
-            } 
-            elseif ($disliked) 
-            {
-                $user->jobFavouriteFun()->updateExistingPivot($favjobpost->id, ['job_like' => 1]);
-            }
         } 
         else 
         {
-            $user->jobFavouriteFun()->attach($favjobpost->id, ['job_like'=> 1]);
+            $user->jobFavouriteFun()->attach($favjobpost->id);
         }
         // $userFavJob = $user->jobFavouriteFun;
         $userFavJob = $user->jobFavouriteFun()->wherePivot('job_id', $id)->first();
