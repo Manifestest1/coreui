@@ -47,7 +47,7 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
     Route::get('/job-view-employer/{id}', [JobController::class, 'jobViewOnEmployer']); 
     Route::get('/fav-job-employee/{id}',[JobController::class,'favJobEmployee']);
 
-    Route::get('/employee-fav-job/{id}',[JobController::class,'EmployeeFavJob']);
+    Route::get('/employee-fav-job',[JobController::class,'EmployeeFavJob']);
     
 
     
