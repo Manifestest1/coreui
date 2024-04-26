@@ -102,7 +102,7 @@ class JobController extends Controller
         $user = User::find($userid);
         $favjobpost = JobPost::find($id);
 
-        if ($user->jobFavouriteFun()->where('job_id', $favjobpost->id)->exists()) 
+        if ($user->jobFavouriteFun()->where('job_id', $favjobpost->id)->where('user_id', $userid)->exists()) 
         {
             $user->jobFavouriteFun()->delete($favjobpost->id);
         
@@ -116,6 +116,13 @@ class JobController extends Controller
         return response()->json($userFavJob);
     }
 
+    // public function employeeFavJob($id)
+    // {
+    //     $userId = Auth::user()->id;
+    //     $jobPost = JobPost::find($id);
+    //     $favJob = $jobPost->jobFavouriteFun();
+    //     return response()->json($favJob);
+    // }
    
 
 }
