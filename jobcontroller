@@ -95,21 +95,23 @@ class JobController extends Controller
         return response()->json($jobPost);
     }
 
+    
     public function favJobEmployee($id)
     {
-        $userId = Auth::user()->id;
-        $user = User::find($userId);
-        $favJobPost = JobPost::find($id); 
+        $userid = Auth::user()->id;
+        $user = User::find($userid);
+        $favjobpost = JobPost::find($id);
     
-        if ($user->favouriteJob()->where('job_id', $favJobPost->id)->exists()) 
+
+        if ($user->favouriteJob()->where('job_id', $favjobpost->id)->where('user_id', $userid)->exists()) 
         {
-            $data = $user->favouriteJob()->detach($favJobPost->id);
+            $user->favouriteJob()->delete($favjobpost->id);
+        
         } 
         else 
-        {
-            $user->favouriteJob()->attach($favJobPost->id);
+        {   
+            $user->favouriteJob()->attach($favjobpost->id);
         }
-    
         $userFavJob = $user->favouriteJob()->wherePivot('job_id', $id)->first();
         return response()->json($userFavJob);
     }
