@@ -30,11 +30,11 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
     Route::post('/update-employee-profile', [AuthController::class, 'updateEmployeeProfile']);  
     Route::post('/update-employer-profile', [AuthController::class, 'updateEmployerProfile']);  
     Route::get('/public-profile-employee/{id}', [AuthController::class, 'emplyeePublicProfile']); 
-    
+
     // Route::get('/get-country', [AuthController::class, 'getCountries']); 
     // Route::get('/get-state/{countryId}', [AuthController::class, 'getStates']); 
     // Route::get('/get-city/{id}', [AuthController::class, 'getCity']); 
-    
+
 
 
     // Job Url
@@ -48,52 +48,8 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
     Route::get('/fav-job-employee/{id}',[JobController::class,'favJobEmployee']);
 
     Route::get('/employee-fav-job ',[JobController::class,'EmployeeFavJob']);
-    
 
-    
+
     Route::post('/create-contact', [ContactController::class, 'createContact']);
-      
+    Route::get('/download-pdf', [AuthController::class, 'downloadPdf']);
 });
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-   

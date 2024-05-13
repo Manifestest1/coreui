@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
-
+use TCPDF;
 
 class AuthController extends Controller
 {
@@ -26,19 +26,20 @@ class AuthController extends Controller
      */
     public function __construct() 
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register','loginForSuperadmin']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register','loginForSuperadmin','downloadPdf']]);
     }
     /**
      * Get a JWT via given credentials.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    
+
     public function login(Request $request)
     {
         try
         {
             $is_user = User::where('email', $request->email)->first();
+           
             if (!$is_user) 
             {
                 $save_user = User::updateOrCreate(
@@ -63,7 +64,7 @@ class AuthController extends Controller
                         'message' => 'Unauthorized', 
                     ], 401);
                 }
-        
+
                 return response()->json([
                     'status' => 'success',
                     'user' => $save_user,
@@ -84,7 +85,7 @@ class AuthController extends Controller
                         'message' => 'Unauthorized',
                     ], 401);
                 }
-                
+
                 $authuser = Auth::user();
                 // $userId = Auth::id();
                 if($authuser->role_id == 1)
@@ -95,8 +96,8 @@ class AuthController extends Controller
                 {
                     $user = User::with('employer')->find($authuser->id);
                 }
-                
-        
+
+
                 return response()->json([
                     'status' => 'success',
                     'user' => $user,
@@ -120,7 +121,7 @@ class AuthController extends Controller
     {
         try
         {
-           
+
             $credentials = $request->only('email','password');
 
                 if (!$token = JWTAuth::attempt($credentials)) 
@@ -130,9 +131,9 @@ class AuthController extends Controller
                         'message' => 'Unauthorized',
                     ], 401);
                 }
-        
+
                 $user = Auth::user();
-        
+
                 return response()->json([
                     'status' => 'success',
                     'user' => $user,
@@ -201,7 +202,7 @@ class AuthController extends Controller
              $user->employee()->create([
                      'employee_id' => $userid,
              ]);
-             
+
              $user->role_id = 1;
              $user->update();
              $user = User::with('employee')->find($userid);
@@ -215,7 +216,7 @@ class AuthController extends Controller
              $user->update();
              $user = User::find($userid);
          }
-       
+
          return response()->json($user); 
      }
 
@@ -228,16 +229,20 @@ class AuthController extends Controller
     {
         $userid = Auth::user()->id;
         $user = User::find($userid);
+        $img_base_url = url('/').'/uploads/';
 
         if($request->imageurl != '' || $request->imageurl != null)
         {
             // $path = url('/').'/uploads/';
             $uploadedFile = $request->file('imageurl');
-            $filename = time() . '_' . $uploadedFile->getClientOriginalName();
+
+            // Get the file extension
+            $extension = $uploadedFile->getClientOriginalExtension();
+            $filename = time() . '_' . 'user_profile' . '.' . $extension;
             $destinationPath = public_path() . '/uploads';
             $uploadedFile->move($destinationPath, $filename);
-            $user->imageurl = asset('uploads/' . $filename);
-            // $user->imageurl = $filename;
+            $user->imageurl = $filename;
+            $user->imagebaseurl = $img_base_url;
         }
 
 
@@ -251,30 +256,30 @@ class AuthController extends Controller
             $user->update();
             $user = User::with('employer')->find($userid);
         }
-       
-        
+
+
         return response()->json($user); 
     }
 
-    public function getCountries()
-    {
-    
-        $data = Country::all();
-        return response()->json($data);
-    }
+    // public function getCountries()
+    // {
 
-    public function getStates()
-    {
-        $statedata = State::all();
-        return response()->json($statedata);
-    }
+    //     $data = Country::all();
+    //     return response()->json($data);
+    // }
 
-    public function getCity()
-    {
-        $statedata = City::all();
-        return response()->json($statedata);
-    }
-    
+    // public function getStates()
+    // {
+    //     $statedata = State::all();
+    //     return response()->json($statedata);
+    // }
+
+    // public function getCity()
+    // {
+    //     $statedata = City::all();
+    //     return response()->json($statedata);
+    // }
+
 
     public function updateEmployeeProfile(Request $request) 
     {
@@ -311,14 +316,13 @@ class AuthController extends Controller
                 'pincode' => $request->pincode,
                 'gender' => $request->gender,
 
-                
+
             ]);
         }
 
         $user = User::with('employee')->find($userId);
 
         return response()->json($user);
-
     }
 
     public function updateEmployerProfile(Request $request) 
@@ -367,6 +371,35 @@ class AuthController extends Controller
         $user = User::find($id);
         return response()->json($user);
     }
+
+    public function downloadPdf()
+    {
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('Your Name');
+        $pdf->SetTitle('User Profile');
+        $pdf->SetSubject('User Profile Information');
+        $pdf->SetKeywords('TCPDF, PDF, profile, user');
+    
+        
+        $pdf->AddPage();
+        $user = User::where('id',11)->with('employee')->first(); 
+        $html = '<img src="'.$user->imagebaseurl.$user->imageurl.'" />';
+        echo $html;
+        // $html = '<h1 style="color:red;">User Profile</h1>';
+        // $html .= '<table>';
+        // $html .= '<tr><td>Name</td><td>' . $user->name . '</td></tr>';
+        // $html .= '<tr><td>Email</td><td>' . $user->email . '</td></tr>';
+        // $html .= '<tr><td>Profile</td><td><img src="'. $user->imagebaseurl.$user->imageurl.'" /></td></tr>'; 
+        // $html .= '</table>';
+    
+        // echo $html;exit;
+        
+        $pdf->writeHTML($html, true, false, true, false, '');
+    
+        $pdf->Output('user_profile.pdf', 'D');
+    }
     /**
      * Get the token array structure.
      *
@@ -393,4 +426,6 @@ class AuthController extends Controller
         Auth::logout();
         return response()->json(['message' => 'User successfully signed out']);
     }
+
+   
 }
