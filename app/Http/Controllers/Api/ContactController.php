@@ -11,27 +11,6 @@ use App\Mail\ContactSendMail;
 
 class ContactController extends Controller
 {
-    public function createContact(Request $request)
-    {   
-
-        $token = $request->input('g-recaptcha-response');
-        
-        $contact = new Contact();
-        $contact->name = $request->name;
-        $contact->email = $request->email;
-        $contact->message = $request->message;
-        $contact->subject = $request->subject;
-        $contact->save();
-        
-
-        return response()->json($contact);
-
-        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => env('6LdKrcspAAAAAEOyzQHRBBv9EzGJNnhnbPcg3a10'),
-            'response' => $token,
-        ]);
-        return response()->json($contact);
-    }
 
     // public function sendMail(Request $request)
     // {

@@ -51,6 +51,5 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
 
     // Route::post('/send-email', [ContactController::class, 'sendMail']);
     Route::post('/contact-mail-send', [ContactController::class, 'contactSendMail']);
-    Route::post('/create-contact', [ContactController::class, 'createContact']);
     Route::get('employee-download-pdf/{id}', [AuthController::class, 'downloadPdf']);
 });
