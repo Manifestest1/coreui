@@ -229,11 +229,10 @@ class AuthController extends Controller
     {
         $userid = Auth::user()->id;
         $user = User::find($userid);
-        $img_base_url = url('/').'/uploads/';
+        $img_base_url = url('/').'/public/uploads/';
 
         if($request->imageurl != '' || $request->imageurl != null)
         {
-            // $path = url('/').'/uploads/';
             $uploadedFile = $request->file('imageurl');
 
             // Get the file extension
@@ -260,25 +259,6 @@ class AuthController extends Controller
 
         return response()->json($user); 
     }
-
-    // public function getCountries()
-    // {
-
-    //     $data = Country::all();
-    //     return response()->json($data);
-    // }
-
-    // public function getStates()
-    // {
-    //     $statedata = State::all();
-    //     return response()->json($statedata);
-    // }
-
-    // public function getCity()
-    // {
-    //     $statedata = City::all();
-    //     return response()->json($statedata);
-    // }
 
 
     public function updateEmployeeProfile(Request $request) 
@@ -368,12 +348,93 @@ class AuthController extends Controller
 
     public function emplyeePublicProfile($id)
     {
-        $user = User::find($id);
+        $user = User::with('employee')->find($id);
         return response()->json($user);
     }
 
-    public function downloadPdf()
+    public function downloadPdf($id)
     {
+        $user = User::where('id',$id)->with('employee')->first(); 
+        
+       // Optimize image URL selection
+       //$html_img = $user->imagebaseurl ? $user->imagebaseurl . $user->imageurl : $user->imageurl;
+       
+       $imageUrl = $user->imagebaseurl ? $user->imagebaseurl . $user->imageurl : $user->imageurl;
+
+        // Step 2: Get the image content
+        $imageData = file_get_contents($imageUrl);
+        
+        // Step 3: Encode the image data to base64
+        $base64 = base64_encode($imageData);
+        
+        // Step 4: Prepare the base64 data for download
+        $filename = 'image.png'; // Change the filename and extension as needed
+        $base64Image = 'data:image/png;base64,' . $base64; // Adjust MIME type based on image type
+        
+        // Step 5: Force download the image
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Transfer-Encoding: base64');
+        header('Content-Length: ' . strlen($base64Image));
+
+        
+        $html = '<html>
+                    <head>
+                        <style>
+                            body {
+                                font-family: Arial, sans-serif;
+                                margin: 20px;
+                                padding: 20px;
+                            }
+                            table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                padding:40px;
+                            }
+                            table, th, td {
+                                border: 1px solid black;
+                            }
+                            th, td {
+                                padding: 10px;
+                                text-align: left;
+                                margin:20px;
+                            }
+                            th {
+                                background-color: #f2f2f2;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <div><h1 style="text-align:center">Employee Profile</h1></div>
+                            <div style="display:block;margin-bottom:20px;text-align:center;">
+                                <img src="' . htmlspecialchars($base64Image) . '"/>
+                            </div>
+                            <table>
+                                <tr><th>Name</th><td>' . htmlspecialchars($user->name) . '</td></tr>
+                                <tr><th>Phone</th><td>' . htmlspecialchars($user->employee->phone) . '</td></tr>
+                                <tr><th>Current Address</th><td>' . htmlspecialchars($user->employee->current_address) . '</td></tr>
+                                <tr><th>Permanent Address</th><td>' . htmlspecialchars($user->employee->permanent_address) . '</td></tr>
+                                <tr><th>Adhar Card No</th><td>' . htmlspecialchars($user->employee->adhar_card_no) . '</td></tr>
+                                <tr><th>Qualification</th><td>' . htmlspecialchars($user->employee->qualification) . '</td></tr>
+                                <tr><th>Certifications</th><td>' . htmlspecialchars($user->employee->certifications) . '</td></tr>
+                                <tr><th>Skills</th><td>' . htmlspecialchars($user->employee->skills) . '</td></tr>
+                                <tr><th>Working From</th><td>' . htmlspecialchars($user->employee->working_from) . '</td></tr>
+                                <tr><th>Work Experience</th><td>' . htmlspecialchars($user->employee->work_experience) . '</td></tr>
+                                <tr><th>Current Working Skill</th><td>' . htmlspecialchars($user->employee->current_working_skill) . '</td></tr>
+                                <tr><th>Languages</th><td>' . htmlspecialchars($user->employee->languages) . '</td></tr>
+                                <tr><th>Hobbies</th><td>' . htmlspecialchars($user->employee->hobbies) . '</td></tr>
+                                <tr><th>Marital Status</th><td>' . htmlspecialchars($user->employee->marital_status) . '</td></tr>
+                                <tr><th>City</th><td>' . htmlspecialchars($user->employee->city) . '</td></tr>
+                                <tr><th>State</th><td>' . htmlspecialchars($user->employee->state) . '</td></tr>
+                                <tr><th>Country</th><td>' . htmlspecialchars($user->employee->country) . '</td></tr>
+                                <tr><th>Pincode</th><td>' . htmlspecialchars($user->employee->pincode) . '</td></tr>
+                                <tr><th>Gender</th><td>' . htmlspecialchars($user->employee->gender) . '</td></tr>
+                            </table>
+                        </div>
+                    </body>
+                </html>';
+                
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
     
         $pdf->SetCreator(PDF_CREATOR);
@@ -381,20 +442,7 @@ class AuthController extends Controller
         $pdf->SetTitle('User Profile');
         $pdf->SetSubject('User Profile Information');
         $pdf->SetKeywords('TCPDF, PDF, profile, user');
-    
-        
         $pdf->AddPage();
-        $user = User::where('id',11)->with('employee')->first(); 
-        $html = '<img src="'.$user->imagebaseurl.$user->imageurl.'" />';
-        echo $html;
-        // $html = '<h1 style="color:red;">User Profile</h1>';
-        // $html .= '<table>';
-        // $html .= '<tr><td>Name</td><td>' . $user->name . '</td></tr>';
-        // $html .= '<tr><td>Email</td><td>' . $user->email . '</td></tr>';
-        // $html .= '<tr><td>Profile</td><td><img src="'. $user->imagebaseurl.$user->imageurl.'" /></td></tr>'; 
-        // $html .= '</table>';
-    
-        // echo $html;exit;
         
         $pdf->writeHTML($html, true, false, true, false, '');
     

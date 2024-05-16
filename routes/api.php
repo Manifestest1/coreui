@@ -25,7 +25,7 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh-token', [AuthController::class, 'refresh']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);    
-    Route::post('/update-profile', [AuthController::class, 'updateProfile']);   
+    Route::post('/update-profile', [AuthController::class, 'updateProfile']);    
     Route::post('/create-profile', [AuthController::class, 'createProfile']);
     Route::post('/update-employee-profile', [AuthController::class, 'updateEmployeeProfile']);  
     Route::post('/update-employer-profile', [AuthController::class, 'updateEmployerProfile']);  
@@ -49,7 +49,8 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
 
     Route::get('/employee-fav-job ',[JobController::class,'EmployeeFavJob']);
 
-
+    // Route::post('/send-email', [ContactController::class, 'sendMail']);
+    Route::post('/contact-mail-send', [ContactController::class, 'contactSendMail']);
     Route::post('/create-contact', [ContactController::class, 'createContact']);
-    Route::get('/download-pdf', [AuthController::class, 'downloadPdf']);
+    Route::get('employee-download-pdf/{id}', [AuthController::class, 'downloadPdf']);
 });

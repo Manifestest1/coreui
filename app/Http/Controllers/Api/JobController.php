@@ -66,7 +66,7 @@ class JobController extends Controller
             $query->where('title', 'like', '%' . $request->input('keyword') . '%')
                   ->orWhere('location', 'like', '%' . $request->input('keyword') . '%');
         }
-    
+
         $results = $query->get();
         return response()->json($results);
     }
@@ -95,11 +95,12 @@ class JobController extends Controller
         return response()->json($jobPost);
     }
 
+
     public function favJobEmployee($id)
     {
         $userId = Auth::user()->id;
         $user = User::find($userId);
-        $favJobPost = JobPost::find($id); 
+        $favJobPost = JobPost::find($id); // Corrected variable name
     
         if ($user->favouriteJob()->where('job_id', $favJobPost->id)->exists()) 
         {
@@ -121,6 +122,6 @@ class JobController extends Controller
         $fav_job = $user->favouriteJob;
         return response()->json($fav_job);
     }
-   
+
 
 }
