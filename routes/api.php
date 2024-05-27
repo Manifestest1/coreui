@@ -36,7 +36,6 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
     // Route::get('/get-city/{id}', [AuthController::class, 'getCity']); 
 
 
-
     // Job Url
     Route::post('/create-jobpost', [JobController::class, 'createJob']);
     Route::get('/job-get-employee', [JobController::class, 'getEmployeeJob']); 
