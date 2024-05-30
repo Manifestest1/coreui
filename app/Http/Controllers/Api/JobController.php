@@ -124,12 +124,13 @@ class JobController extends Controller
         return response()->json($fav_job);
     }
 
-
     public function getEmployee()
     { 
-        $user_id = Auth::id();
-        $user = User::find($user_id);
-        $emp = Employee::join('users','employees.employee_id','=','users.id')->select('users.name')->get();
+         $user_id = user::get();
+         $user = User::find($user_id);
+        $emp = Employee::join('users','employees.employee_id','=','users.id')
+                ->select('users.name')
+                ->get();
         return $emp;
     }
 }
