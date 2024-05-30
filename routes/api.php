@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\JobController;  
-use App\Http\Controllers\Api\ContactController;  
+use App\Http\Controllers\Api\ContactController; 
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +16,6 @@ use App\Http\Controllers\Api\ContactController;
 | be assigned to the "api" middleware group. Make something great! 
 |
 */
-
 Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) 
 {
     Route::post('/login', [AuthController::class, 'login']);
@@ -47,6 +46,7 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
     Route::get('/fav-job-employee/{id}',[JobController::class,'favJobEmployee']);
 
     Route::get('/employee-fav-job ',[JobController::class,'EmployeeFavJob']);
+    Route::get('/get-employee',[JobController::class,'getEmployee']);
 
     // Route::post('/send-email', [ContactController::class, 'sendMail']);
     Route::post('/contact-mail-send', [ContactController::class, 'contactSendMail']);

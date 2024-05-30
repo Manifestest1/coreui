@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\JobPost;
+use App\Models\Employee;
 use Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
@@ -124,4 +125,11 @@ class JobController extends Controller
     }
 
 
+    public function getEmployee()
+    { 
+        $user_id = Auth::id();
+        $user = User::find($user_id);
+        $emp = Employee::join('users','employees.employee_id','=','users.id')->select('users.name')->get();
+        return $emp;
+    }
 }
