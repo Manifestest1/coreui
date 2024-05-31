@@ -129,7 +129,7 @@ class JobController extends Controller
          $user_id = user::get();
          $user = User::find($user_id);
         $emp = Employee::join('users','employees.employee_id','=','users.id')
-                ->select('users.name')
+                ->select('users.name','users.id')
                 ->get();
         return $emp;
     }
