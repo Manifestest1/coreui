@@ -2,6 +2,7 @@
 
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Route;
+//use App\Http\Controllers\PdfController; 
 
 /*
 |--------------------------------------------------------------------------
@@ -31,3 +32,5 @@ Route::get('/login/google/callback', function ()
     dd($user);
     // Handle the authenticated user as needed
 });
+
+//Route::get('/employee-download-pdf/{id}', [PdfController::class,'generatepdf']);

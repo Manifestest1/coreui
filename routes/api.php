@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\JobController;  
-use App\Http\Controllers\Api\ContactController;  
+use App\Http\Controllers\Api\ContactController;   
 
 /*
 |--------------------------------------------------------------------------
@@ -41,5 +41,6 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
     Route::get('/job-view-employer/{id}', [JobController::class, 'jobViewOnEmployer']); 
     
     Route::post('/create-contact', [ContactController::class, 'createContact']);
+    Route::get('/employee-download-pdf/{id}', [AuthController::class,'generatepdf']);
       
-});
+}); 

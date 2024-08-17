@@ -12,6 +12,11 @@ use App\Models\JobPost;
 use Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Country;
+use App\Models\State;
+use App\Models\City;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class AuthController extends Controller
 {
@@ -22,19 +27,20 @@ class AuthController extends Controller
      */
     public function __construct() 
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register','loginForSuperadmin']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register','loginForSuperadmin','generatepdf']]);
     }
     /**
      * Get a JWT via given credentials.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    
+
     public function login(Request $request)
     {
         try
         {
             $is_user = User::where('email', $request->email)->first();
+           
             if (!$is_user) 
             {
                 $save_user = User::updateOrCreate(
@@ -59,7 +65,7 @@ class AuthController extends Controller
                         'message' => 'Unauthorized', 
                     ], 401);
                 }
-        
+
                 return response()->json([
                     'status' => 'success',
                     'user' => $save_user,
@@ -80,7 +86,7 @@ class AuthController extends Controller
                         'message' => 'Unauthorized',
                     ], 401);
                 }
-                
+
                 $authuser = Auth::user();
                 // $userId = Auth::id();
                 if($authuser->role_id == 1)
@@ -91,8 +97,8 @@ class AuthController extends Controller
                 {
                     $user = User::with('employer')->find($authuser->id);
                 }
-                
-        
+
+
                 return response()->json([
                     'status' => 'success',
                     'user' => $user,
@@ -116,7 +122,7 @@ class AuthController extends Controller
     {
         try
         {
-           
+
             $credentials = $request->only('email','password');
 
                 if (!$token = JWTAuth::attempt($credentials)) 
@@ -126,9 +132,9 @@ class AuthController extends Controller
                         'message' => 'Unauthorized',
                     ], 401);
                 }
-        
+
                 $user = Auth::user();
-        
+
                 return response()->json([
                     'status' => 'success',
                     'user' => $user,
@@ -197,7 +203,7 @@ class AuthController extends Controller
              $user->employee()->create([
                      'employee_id' => $userid,
              ]);
-             
+
              $user->role_id = 1;
              $user->update();
              $user = User::with('employee')->find($userid);
@@ -211,7 +217,7 @@ class AuthController extends Controller
              $user->update();
              $user = User::find($userid);
          }
-       
+
          return response()->json($user); 
      }
 
@@ -224,16 +230,19 @@ class AuthController extends Controller
     {
         $userid = Auth::user()->id;
         $user = User::find($userid);
+        $img_base_url = url('/').'/public/uploads/';
 
         if($request->imageurl != '' || $request->imageurl != null)
         {
-            // $path = url('/').'/uploads/';
             $uploadedFile = $request->file('imageurl');
-            $filename = time() . '_' . $uploadedFile->getClientOriginalName();
+
+            // Get the file extension
+            $extension = $uploadedFile->getClientOriginalExtension();
+            $filename = time() . '_' . 'user_profile' . '.' . $extension;
             $destinationPath = public_path() . '/uploads';
             $uploadedFile->move($destinationPath, $filename);
-            $user->imageurl = asset('uploads/' . $filename);
-            // $user->imageurl = $filename;
+            $user->imageurl = $filename;
+            $user->imagebaseurl = $img_base_url;
         }
 
 
@@ -247,10 +256,11 @@ class AuthController extends Controller
             $user->update();
             $user = User::with('employer')->find($userid);
         }
-       
-        
-        return response()->json($user);
+
+
+        return response()->json($user); 
     }
+
 
     public function updateEmployeeProfile(Request $request) 
     {
@@ -284,14 +294,36 @@ class AuthController extends Controller
                 'city' => $request->city,
                 'state' => $request->state,
                 'country' => $request->country,
-                'pincode' => $request->pincode
+                'pincode' => $request->pincode,
+                'gender' => $request->gender,
+                'company_name' => $request->company_name,
+                'responsibilities_and_achievements' => $request->responsibilities_and_achievements,
+                'Degree' => $request->Degree,
+                'university_or_collegeName' => $request->university_or_collegeNames,
+                'graduation_date' => $request->graduation_date,
+                'coursework_or_academic_achievements' => $request->coursework_or_academic_achievements,
+                'project_title' => $request->project_title,
+                'brief_description' => $request->brief_description,
+                'role_and_contributions' => $request->role_and_contributions,
+                'Technologies_used' => $request->Technologies_used,
+                'dates_of_employment' => $request->dates_of_employment,
+                'location' => $request->location,
+                'job_title' => $request->job_title,
+                'professional_summary' => $request->professional_summary,
+                'linkedIn_profile' => $request->linkedIn_profile,
+                'proficiency_level_of_language' => $request->proficiency_level_of_language,
+                'References' => $request->References,
+                'issuing_organization' => $request->issuing_organization,
+                'certification_name' => $request->certification_name,
+                'date_of_certification' => $request->date_of_certification,
+
+
             ]);
         }
 
         $user = User::with('employee')->find($userId);
 
         return response()->json($user);
-
     }
 
     public function updateEmployerProfile(Request $request) 
@@ -335,11 +367,36 @@ class AuthController extends Controller
 
     }
 
-    public function publicProfileOfEmployee($id)
+    public function emplyeePublicProfile($id)
     {
-        $user = User::find($id);
+        $user = User::with('employee')->find($id);
         return response()->json($user);
     }
+
+    public function generatepdf($id)
+    {
+        $user = User::where('id',$id)->with('employee')->first(); 
+    
+        $imageUrl = "https://staging.fyies.com/jobsite/backend/public/uploads/1723803210_user_profile.jpg";
+        
+            $imageData = file_get_contents($imageUrl);
+            $base64 = base64_encode($imageData);
+            $base64Image = 'data:image/jpeg;base64,' . $base64; // Adjust MIME type based on actual image type
+        
+            $html = view('pdf', ['user' => $user, 'imageUrl' => $base64Image])->render();
+            
+            $options = new Options();
+            $options->set('isHtml5ParserEnabled', true);
+            $options->set('isRemoteEnabled', true);
+            
+            $pdf = new Dompdf($options);
+            $pdf->loadHTML($html);
+            
+            $pdf->setPaper('A4', 'portrait'); // You can change the paper size and orientation here
+            $pdf->render();
+            
+          return $pdf->stream('user_profile.pdf', ['Attachment' => 1]);
+     }
     /**
      * Get the token array structure.
      *
@@ -366,4 +423,6 @@ class AuthController extends Controller
         Auth::logout();
         return response()->json(['message' => 'User successfully signed out']);
     }
+
+   
 }

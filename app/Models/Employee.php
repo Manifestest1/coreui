@@ -28,7 +28,27 @@ class Employee extends Model
         'city',
         'state',
         'country',
-        'pincode'
+        'pincode',
+        'company_name',
+        'responsibilities_and_achievements',
+        'Degree',
+        'university_or_collegeName',
+        'graduation_date',
+        'coursework_or_academic_achievements',
+        'project_title',
+        'brief_description',
+        'role_and_contributions',
+        'Technologies_used',
+        'dates_of_employment',
+        'location',
+        'job_title',
+        'professional_summary',
+        'linkedIn_profile',
+        'proficiency_level_of_language',
+        'References',
+        'issuing_organization',
+        'certification_name',
+        'date_of_certification',
     ];
 
     public function user()
