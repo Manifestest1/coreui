@@ -264,6 +264,7 @@ class AuthController extends Controller
 
     public function updateEmployeeProfile(Request $request) 
     {
+        // return response()->json($request->all());
         $userId = Auth::id(); // Get the authenticated user's ID
 
         // Update the user's attributes
@@ -299,7 +300,7 @@ class AuthController extends Controller
                 'company_name' => $request->company_name,
                 'responsibilities_and_achievements' => $request->responsibilities_and_achievements,
                 'Degree' => $request->Degree,
-                'university_or_collegeName' => $request->university_or_collegeNames,
+                'university_or_collegeName' => $request->university_or_collegeName,
                 'graduation_date' => $request->graduation_date,
                 'coursework_or_academic_achievements' => $request->coursework_or_academic_achievements,
                 'project_title' => $request->project_title,
@@ -382,7 +383,7 @@ class AuthController extends Controller
             $imageData = file_get_contents($imageUrl);
             $base64 = base64_encode($imageData);
             $base64Image = 'data:image/jpeg;base64,' . $base64; // Adjust MIME type based on actual image type
-        
+            return view('pdf', ['user' => $user, 'imageUrl' => $base64Image]);
             $html = view('pdf', ['user' => $user, 'imageUrl' => $base64Image])->render();
             
             $options = new Options();

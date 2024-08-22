@@ -17,7 +17,10 @@
 
     html, body {background: #181818; font-family:  helvetica, arial, sans-serif; font-size: 16px; color: #222;}
 
-    .clear {clear: both;}
+    .clear {
+        clear: both;
+        border-top: 1px solid #dedede;
+    }
 
     p {
         font-size: .9em;
@@ -34,6 +37,7 @@
     }
 
     .mainDetails {
+        
         padding: 25px 35px;
         border-bottom: 2px solid #cf8a05;
         background: #ededed;
@@ -107,12 +111,6 @@
         color: #cf8a05;
     }
 
-
-    section {
-        border-top: 1px solid #dedede;
-        padding: 20px 0 0;
-    }
-
     section:first-child {
         border-top: 0;
     }
@@ -136,11 +134,15 @@
         font-style: Arial;
         font-size: .9em;
         color: #cf8a05;
+        margin-bottom: 23px;
+    }
+
+    p.sectionTitle{
+        color: #cf8a05;
     }
 
     .sectionContent h2 {
         font-size: 0.9em;
-        margin-bottom: -2px;
     }
 
     .subDetails {
@@ -246,75 +248,7 @@
             margin-bottom: 3px;
         }
     }
-
-    @media print {
-        #cv {
-            width: 100%;
-        }
-    }
-
-    @-webkit-keyframes reset {
-        0% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 0;
-        }
-    }
-
-    @-webkit-keyframes fade-in {
-        0% {
-            opacity: 0;
-        }
-        40% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 1;
-        }
-    }
-
-    @-moz-keyframes reset {
-        0% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 0;
-        }
-    }
-
-    @-moz-keyframes fade-in {
-        0% {
-            opacity: 0;
-        }
-        40% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 1;
-        }
-    }
-
-    @keyframes reset {
-        0% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 0;
-        }
-    }
-
-    @keyframes fade-in {
-        0% {
-            opacity: 0;
-        }
-        40% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 1;
-        }
-    }
+    
 
     .instaFade {
         -webkit-animation-name: reset, fade-in;
@@ -343,39 +277,19 @@
         animation-duration: 2.5s;
         animation-timing-function: ease-in;
     }
-    
-    .delayOne {
-        -webkit-animation-delay: 0, .5s;
-        -moz-animation-delay: 0, .5s;
-        animation-delay: 0, .5s;
-    }
-
-    .delayTwo {
-        -webkit-animation-delay: 0, 1s;
-        -moz-animation-delay: 0, 1s;
-        animation-delay: 0, 1s;
-    }
-
-    .delayThree {
-        -webkit-animation-delay: 0, 1.5s;
-        -moz-animation-delay: 0, 1.5s;
-        animation-delay: 0, 1.5s;
-    }
-
-    .delayFour {
-        -webkit-animation-delay: 0, 2s;
-        -moz-animation-delay: 0, 2s;
-        animation-delay: 0, 2s;
-    }
-
-    .delayFive {
-        -webkit-animation-delay: 0, 2.5s;
-        -moz-animation-delay: 0, 2.5s;
-        animation-delay: 0, 2.5s;
-    }
     #pdf1{
         margin-top: 10px;
         }
+    .title{
+        font-family:  Helvetica, Arial, sans-serif;
+        font-style: Arial;
+        font-size: 1.25em;
+        margin-bottom: 20px;
+        margin-top: 20px;
+        text-align: left;
+        font-weight: bold;
+        
+    }
 	</style>
 </head>
 <body id="top">
@@ -392,6 +306,7 @@
                 <ul>
                     <li>{{ $user->employee->permanent_address }}</li>
                     <li>email: <a href="mail:{{ $user->email }}" target="_blank">{{ $user->email }}</a></li>
+                    <li>Linkedin Profile: <a href="mail:{{ $user->employee->linkedIn_profile }}" target="_blank">{{ $user->employee->linkedIn_profile}}</a></li>
                     <li>contact: <a href="tel:{{ $user->employee->phone }}" target="_blank">{{ $user->employee->phone }}</a></li>
                 </ul>
             </div>
@@ -399,36 +314,31 @@
         </div>
         <div id="mainArea" class="quickFade delayFive">
             <section>
-                <article>
+                    <div class="title">Professional Summary</div>
                     <div class="sectionTitle">
                         <h1>Objective</h1>
                     </div>
                     <div class="sectionContent">
-                        <p>To contribute best of my knowledge, skill and ability in the growth of the organization where will be working and also attain new height in my field of work.</p>
+                        <article>
+                            <p>{{ $user->employee->professional_summary}}</p>
+                        </article>
                     </div>
-                </article>
-                <div class="clear"></div>
             </section>
-		
 		
 		<section>
 			<div class="sectionTitle">
 				<h1>Work Experience</h1>
 			</div>
-			
 			<div class="sectionContent">
 				<article>
-					<p class="subDetails">April 2011 - Present</p>
 					<p>{{ $user->employee->work_experience }}</p>
 				</article>
 			</div>
-			<div class="clear"></div>
-		</section>
-		
+		</section>	
 		
 		<section>
 			<div class="sectionTitle">
-				<h1>Key Skills</h1>
+				<h1>Current Working Skill</h1>
 			</div>
 			
 			<div class="sectionContent">
@@ -441,46 +351,157 @@
 		
 		
 		<section>
+            <div class="title">Qualification</div>
 			<div class="sectionTitle">
-				<h1>Education</h1>
+				<h1>Heighest Qualification</h1>
 			</div>
 			
 			<div class="sectionContent">
 				<article>
-					<p class="subDetails">Qualification</p>
 					<p>{{ $user->employee->qualification }}</p>
 				</article>
 			</div>
-			<div class="clear"></div>
 		</section>
 
         <section>
 			<div class="sectionTitle">
-				<h1>Current Working Skill</h1>
+				<h1>Degree</h1>
 			</div>
 			
 			<div class="sectionContent">
 				<article>
-					<p>{{  $user->employee->current_working_skill }}</p>
+					<p>{{ $user->employee->Degree }}</p>
+				</article>
+			</div>
+		</section>
+
+        <section>
+			<div class="sectionTitle">
+				<h1>University or college name</h1>
+			</div>
+			
+			<div class="sectionContent">
+				<article>
+					<p>{{ $user->employee->university_or_collegeName }}</p>
+				</article>
+			</div>
+		</section>
+
+        <section>
+			<div class="sectionTitle">
+				<h1>Graduation Date</h1>
+			</div>
+			
+			<div class="sectionContent">
+				<article>
+					<p>{{ $user->employee->graduation_date }}</p>
 				</article>
 			</div>
 			<div class="clear"></div>
 		</section>
 
         <section>
+            <div class="title">Work Experience</div>
 			<div class="sectionTitle">
-				<h1>Working From</h1>
+				<h1>Company Name</h1>
 			</div>
 			
 			<div class="sectionContent">
 				<article>
-					<p>{{ $user->employee->working_from }}</p>
+					<p>{{ $user->employee->company_name }}</p>
 				</article>
 			</div>
-			<div class="clear"></div>
 		</section>
 
         <section>
+			<div class="sectionTitle">
+				<h1>Date of Employment</h1>
+			</div>
+			
+			<div class="sectionContent">
+				<article>
+					<p>{{ $user->employee->dates_of_employment }}</p>
+				</article>
+			</div>
+		</section>
+
+        <section>
+            <div class="sectionTitle">
+                <h1>Working From</h1>
+            </div>
+            
+            <div class="sectionContent">
+                <article>
+                    <p>{{ $user->employee->working_from }}</p>
+                </article>
+            </div>
+        </section>
+
+        <section>
+            <div class="sectionTitle">
+                <h1>Location</h1>
+            </div>
+            
+            <div class="sectionContent">
+                <article>
+                    <p>{{ $user->employee->location }}</p>
+                </article>
+            </div>
+        </section>
+
+        <section>
+            <div class="sectionTitle">
+                <h1>Responsibilities and Achievements</h1>
+            </div>
+            
+            <div class="sectionContent">
+                <article>
+                    <p>{{ $user->employee->responsibilities_and_achievements }}</p>
+                </article>
+            </div>
+            <div class="clear"></div>
+        </section>
+
+        <section>
+        <div class="title">Projects</div>
+			<div class="sectionTitle">
+				<h1>Project Name</h1>
+			</div>
+
+			<div class="sectionContent">
+				<article>
+					<p>{{ $user->employee->project_title }}</p>
+				</article>
+			</div>
+		</section>
+
+        <section>
+            <div class="sectionTitle">
+                <h1>Brief Description</h1>
+            </div>
+            
+            <div class="sectionContent">
+                <article>
+                    <p>{{ $user->employee->brief_description}}</p>
+                </article>
+            </div>
+        </section>
+
+        <section>
+			<div class="sectionTitle">
+				<h1>Roles and Contribution</h1>
+			</div>
+			
+			<div class="sectionContent">
+				<article>
+					<p>{{ $user->employee->role_and_contributions }}</p>
+				</article>
+			</div>
+            <div class="clear"></div>
+		</section>
+
+        <section>
+            <div class="title">Skill</div>
 			<div class="sectionTitle">
 				<h1>Certification</h1>
 			</div>
@@ -489,28 +510,67 @@
 				<ul class="keySkills">
                     @foreach(explode(',', $user->employee->certifications) as $certification)
                             <li>{{ trim($certification) }}</li>
+                            <li>{{ $user->employee->date_of_certification }}</li>
                     @endforeach
 				</ul>
+			</div>
+		</section>
+
+        <section>
+			<div class="sectionTitle">
+				<h1>Issuing Organization</h1>
+			</div>
+			
+			<div class="sectionContent">
+				<article>
+					<p>{{ $user->employee->issuing_organization }}</p>
+				</article>
+			</div>
+			<div class="clear"></div>
+		</section>
+
+        <section>
+            <div class="title">Languages</div>
+			<div class="sectionTitle">
+				<h1>languages</h1>
+			</div>
+			
+			<div class="sectionContent">
+            <ul class="keySkills">
+                    @foreach(explode(',', $user->employee->languages) as $languages)
+                            <li>{{ trim($languages) }}</li>
+                    @endforeach
+			</ul>
+			</div>
+		</section>
+
+        <section>
+			<div class="sectionTitle">
+				<h1>proficiency Level of Languages</h1>
+			</div>
+			
+			<div class="sectionContent">
+				<article>
+					<p>{{ $user->employee->proficiency_level_of_language }}</p>
+				</article>
 			</div>
 			<div class="clear"></div>
 		</section>
 
 		<section>
-			<div class="sectionTitle">
-				<h1>Personal Details</h1>
-			</div>
+			<div class="title">Personal Details</div>
 			
-			<div class="sectionContent marginFooter">
+			<div class=" marginFooter">
 				<article>
-					<p class="subDetails">Permanent Address :  {{ $user->employee->permanent_address }}</p>
-                    <p class="subDetails">Adhar Card No:  {{ $user->employee->adhar_card_no }}</p>
-                    <p class="subDetails">Languages:  {{ $user->employee->languages }}</p>
-                    <p class="subDetails">Hobbies:  {{ $user->employee->hobbies }}</p>
-                    <p class="subDetails">City:  {{ $user->employee->city }}</p>
-                    <p class="subDetails">State:  {{ $user->employee->state }}</p>
-                    <p class="subDetails">Country:  {{ $user->employee->country }}</p>
-                    <p class="subDetails">Pin Code:  {{ $user->employee->pincode }}</p>
-                    <p class="subDetails">Gender:  {{ $user->employee->gender }}</p>
+					<p class="sectionTitle">Permanent Address :  </p><p>{{ $user->employee->permanent_address }}</p>
+                    <p class="sectionTitle">Adhar Card No:  </p><p class="sectionContent">{{ $user->employee->adhar_card_no }}</p>
+                    <p class="sectionTitle">Hobbies:  </p><p class="sectionContent">{{ $user->employee->hobbies }}</p>
+                    <p class="sectionTitle">City:  </p><p class="sectionContent">{{ $user->employee->city }}</p>
+                    <p class="sectionTitle">State:  </p><p class="sectionContent">{{ $user->employee->state }}</p>
+                    <p class="sectionTitle">Country:  </p><p class="sectionContent">{{ $user->employee->country }}</p>
+                    <p class="sectionTitle">Pin Code:  </p><p class="sectionContent">{{ $user->employee->pincode }}</p>
+                    <p class="sectionTitle">Gender:  </p><p class="sectionContent">{{ $user->employee->gender }}</p>
+                    <p class="sectionTitle">Marital Status:  </p><p class="sectionContent">{{ $user->employee->marital_status }}</p>
 				</article>
 			</div>
 			<div class="clear mainFooter "></div>
