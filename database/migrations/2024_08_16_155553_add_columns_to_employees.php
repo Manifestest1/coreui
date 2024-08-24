@@ -12,28 +12,67 @@ return new class extends Migration
     public function up()
     {
         Schema::table('employees', function (Blueprint $table) {
-            $table->string('company_name')->nullable();
-            $table->string('responsibilities_and_achievements')->nullable();
-            $table->string('Degree')->nullable();
-            $table->string('university_or_collegeName')->nullable();
-            $table->string('graduation_date')->nullable();
-            $table->string('coursework_or_academic_achievements')->nullable();
-            $table->string('project_title')->nullable();
-            $table->string('brief_description')->nullable();
-            $table->string('role_and_contributions')->nullable();
-            $table->string('Technologies_used')->nullable();
-            $table->string('dates_of_employment')->nullable();  
-            $table->string('location')->nullable();              
-            $table->string('job_title')->nullable();
-            $table->string('professional_summary')->nullable();
-            $table->string('linkedIn_profile')->nullable();
-            $table->string('proficiency_level_of_language')->nullable();
-            $table->string('References')->nullable();
-            $table->string('issuing_organization')->nullable();
-            $table->string('certification_name')->nullable();
-            $table->string('date_of_certification')->nullable();
-
-            $table->foreign('employer_id')->references('id')->on('users')->onDelete('cascade');
+            // Check and add columns only if they don't exist
+            if (!Schema::hasColumn('employees', 'company_name')) {
+                $table->string('company_name')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'responsibilities_and_achievements')) {
+                $table->string('responsibilities_and_achievements')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'Degree')) {
+                $table->string('Degree')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'university_or_collegeName')) {
+                $table->string('university_or_collegeName')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'graduation_date')) {
+                $table->string('graduation_date')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'coursework_or_academic_achievements')) {
+                $table->string('coursework_or_academic_achievements')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'project_title')) {
+                $table->string('project_title')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'brief_description')) {
+                $table->string('brief_description')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'role_and_contributions')) {
+                $table->string('role_and_contributions')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'Technologies_used')) {
+                $table->string('Technologies_used')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'dates_of_employment')) {
+                $table->string('dates_of_employment')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'location')) {
+                $table->string('location')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'job_title')) {
+                $table->string('job_title')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'professional_summary')) {
+                $table->string('professional_summary')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'linkedIn_profile')) {
+                $table->string('linkedIn_profile')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'proficiency_level_of_language')) {
+                $table->string('proficiency_level_of_language')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'References')) {
+                $table->string('References')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'issuing_organization')) {
+                $table->string('issuing_organization')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'certification_name')) {
+                $table->string('certification_name')->nullable();
+            }
+            if (!Schema::hasColumn('employees', 'date_of_certification')) {
+                $table->string('date_of_certification')->nullable();
+            }
         });
     }
 

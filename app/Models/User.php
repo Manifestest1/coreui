@@ -10,6 +10,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Models\JobPost;
 use App\Models\Employee;
 use App\Models\Employer;
+use App\Models\Project;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -70,6 +71,11 @@ class User extends Authenticatable implements JWTSubject
     public function employee()
     {
         return $this->hasOne(Employee::class,'employee_id','id'); 
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class,'employee_id','id'); 
     }
 
     public function employer()

@@ -4,7 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\JobController;  
-use App\Http\Controllers\Api\ContactController;   
+use App\Http\Controllers\Api\ContactController;  
+use App\Http\Controllers\ProjectController;  
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +31,7 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
     Route::post('/update-employee-profile', [AuthController::class, 'updateEmployeeProfile']);  
     Route::post('/update-employer-profile', [AuthController::class, 'updateEmployerProfile']);  
     Route::get('/public-profile-employee/{id}', [AuthController::class, 'publicProfileOfEmployee']);  
-
+ 
     // Job Url
     Route::post('/create-jobpost', [JobController::class, 'createJobPost']);
     Route::get('/job-get-employee', [JobController::class, 'jobGetonEmployee']); 
@@ -42,5 +43,8 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
     
     Route::post('/create-contact', [ContactController::class, 'createContact']);
     Route::get('/employee-download-pdf/{id}', [AuthController::class,'generatepdf']);
+
+    Route::get('/show-projects', [ProjectController::class,'index']);
+    Route::get('/create-projects', [ProjectController::class,'store']);
       
 }); 

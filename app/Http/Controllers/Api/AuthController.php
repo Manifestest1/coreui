@@ -12,6 +12,7 @@ use App\Models\JobPost;
 use Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Project;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
@@ -249,7 +250,7 @@ class AuthController extends Controller
         if($user->role_id == 1)
         {
             $user->update();
-            $user = User::with('employee')->find($userid);
+            $user = User::with(['projects', 'employee'])->find($userid);
         }
         else
         {
@@ -274,6 +275,7 @@ class AuthController extends Controller
 
         // Retrieve the user model instance
         $user = User::find($userId);
+        
 
         // Update the employee attributes if the user has an associated employee
         if ($user) 
@@ -303,10 +305,6 @@ class AuthController extends Controller
                 'university_or_collegeName' => $request->university_or_collegeName,
                 'graduation_date' => $request->graduation_date,
                 'coursework_or_academic_achievements' => $request->coursework_or_academic_achievements,
-                'project_title' => $request->project_title,
-                'brief_description' => $request->brief_description,
-                'role_and_contributions' => $request->role_and_contributions,
-                'Technologies_used' => $request->Technologies_used,
                 'dates_of_employment' => $request->dates_of_employment,
                 'location' => $request->location,
                 'job_title' => $request->job_title,
@@ -321,6 +319,24 @@ class AuthController extends Controller
 
             ]);
         }
+
+       // Retrieve the payload from the request
+       $payload = $request->input('payload');
+
+       // Decode JSON payload to an array
+       $projects = json_decode($payload, true);
+
+       // Insert each project into the database
+       foreach ($projects as $projectData) 
+       {
+           Project::create([
+               'employee_id' => $userId,
+               'project_name' => $projectData['projectName'],
+               'brief_description' => $projectData['briefDescription'],
+               'role_and_contributions' => $projectData['roleAndContributions'],
+               'Technologies_used' => $projectData['technologiesUsed'],
+           ]);
+       }
 
         $user = User::with('employee')->find($userId);
 
@@ -376,9 +392,11 @@ class AuthController extends Controller
 
     public function generatepdf($id)
     {
-        $user = User::where('id',$id)->with('employee')->first(); 
+        $user = User::where('id',$id)->with('employee')->first();  
     
-        $imageUrl = "https://staging.fyies.com/jobsite/backend/public/uploads/1723803210_user_profile.jpg";
+       // $imageUrl = "https://staging.fyies.com/jobsite/backend/public/uploads/1723803210_user_profile.jpg";
+
+            $imageUrl = $user->imagebaseurl ? $user->imagebaseurl . $user->imageurl : $user->imageurl;
         
             $imageData = file_get_contents($imageUrl);
             $base64 = base64_encode($imageData);
