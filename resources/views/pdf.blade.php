@@ -20,13 +20,7 @@
     .clear {
         clear: both;
         border-top: 1px solid #dedede;
-    }
-
-    p {
-        font-size: .9em;
-        line-height: 1.4em;
-        margin-bottom: 20px;
-        color: #444;
+        margin-top: 20px;
     }
 
     #cv {
@@ -41,6 +35,11 @@
         padding: 25px 35px;
         border-bottom: 2px solid #cf8a05;
         background: #ededed;
+    }
+
+    h1, p {
+        margin: 0;
+        padding: 0;
     }
 
     .mainFooter {
@@ -127,6 +126,7 @@
     .sectionContent {
         float: right;
         width: 72.5%;
+        flex: 3;
     }
 
     .sectionTitle h1 {
@@ -134,7 +134,6 @@
         font-style: Arial;
         font-size: .9em;
         color: #cf8a05;
-        margin-bottom: 23px;
     }
 
     p.sectionTitle{
@@ -290,6 +289,38 @@
         font-weight: bold;
         
     }
+
+    .summary-section {
+    display: block;
+    padding: 10px; 
+    clear: both; 
+}
+
+.section-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.sectionTitle {
+    flex: 1; 
+    margin-right: 10px; 
+}
+
+.sectionContent {
+    flex: 3; 
+}
+
+.project-container {
+    padding-bottom: 20px;
+}
+
+p {
+    font-size: .9em;
+    line-height: 1.4em;
+    margin-bottom: 10px;
+    color: #444;
+}
 	</style>
 </head>
 <body id="top">
@@ -313,7 +344,7 @@
             <div class="clear"></div>
         </div>
         <div id="mainArea" class="quickFade delayFive">
-            <section>
+            <section class="summary-section">
                     <div class="title">Professional Summary</div>
                     <div class="sectionTitle">
                         <h1>Objective</h1>
@@ -325,7 +356,7 @@
                     </div>
             </section>
 		
-		<section>
+		<section class="summary-section">
 			<div class="sectionTitle">
 				<h1>Work Experience</h1>
 			</div>
@@ -336,7 +367,7 @@
 			</div>
 		</section>	
 		
-		<section>
+		<section class="summary-section">
 			<div class="sectionTitle">
 				<h1>Current Working Skill</h1>
 			</div>
@@ -350,7 +381,7 @@
 		</section>
 		
 		
-		<section>
+		<section class="summary-section">
             <div class="title">Qualification</div>
 			<div class="sectionTitle">
 				<h1>Heighest Qualification</h1>
@@ -363,7 +394,7 @@
 			</div>
 		</section>
 
-        <section>
+        <section class="summary-section">
 			<div class="sectionTitle">
 				<h1>Degree</h1>
 			</div>
@@ -375,7 +406,7 @@
 			</div>
 		</section>
 
-        <section>
+        <section class="summary-section">
 			<div class="sectionTitle">
 				<h1>University or college name</h1>
 			</div>
@@ -387,7 +418,7 @@
 			</div>
 		</section>
 
-        <section>
+        <section class="summary-section">
 			<div class="sectionTitle">
 				<h1>Graduation Date</h1>
 			</div>
@@ -400,7 +431,7 @@
 			<div class="clear"></div>
 		</section>
 
-        <section>
+        <section class="summary-section">
             <div class="title">Work Experience</div>
 			<div class="sectionTitle">
 				<h1>Company Name</h1>
@@ -413,7 +444,7 @@
 			</div>
 		</section>
 
-        <section>
+        <section class="summary-section">
 			<div class="sectionTitle">
 				<h1>Date of Employment</h1>
 			</div>
@@ -425,7 +456,7 @@
 			</div>
 		</section>
 
-        <section>
+        <section class="summary-section">
             <div class="sectionTitle">
                 <h1>Working From</h1>
             </div>
@@ -437,7 +468,7 @@
             </div>
         </section>
 
-        <section>
+        <section class="summary-section">
             <div class="sectionTitle">
                 <h1>Location</h1>
             </div>
@@ -449,7 +480,7 @@
             </div>
         </section>
 
-        <section>
+        <section class="summary-section">
             <div class="sectionTitle">
                 <h1>Responsibilities and Achievements</h1>
             </div>
@@ -462,46 +493,50 @@
             <div class="clear"></div>
         </section>
 
-        <section>
-        <div class="title">Projects</div>
-			<div class="sectionTitle">
-				<h1>Project Name</h1>
-			</div>
+        <section class="summary-section">
+            <div class="title">Projects</div>
+            @foreach ($user->projects as $project )
+            <div class="project-container">
+                <div class="section-container">
+                    <div class="sectionTitle">
+                        <h1>Project Name</h1>
+                    </div>
+                    <div class="sectionContent">
+                        <article>
+                            <p>{{ $project->project_name }}</p>
+                        </article>
+                    </div>
+                </div>
 
-			<div class="sectionContent">
-				<article>
-					<p>{{ $user->employee->project_title }}</p>
-				</article>
-			</div>
-		</section>
+                <div class="section-container">
+                    <div class="sectionTitle">
+                        <h1>Brief Description</h1>
+                    </div>
+                    <div class="sectionContent">
+                        <article>
+                            <p>{{ $project->brief_description }}</p>
+                        </article>
+                    </div>
+                </div>
 
-        <section>
-            <div class="sectionTitle">
-                <h1>Brief Description</h1>
+                <div class="section-container">
+                    <div class="sectionTitle">
+                        <h1>Roles and Contribution</h1>
+                    </div>
+                    <div class="sectionContent">
+                        <article>
+                            <p>{{ $project->role_and_contributions }}</p>
+                        </article>
+                    </div>
+                </div>
+                <div class="clear"></div>
             </div>
-            
-            <div class="sectionContent">
-                <article>
-                    <p>{{ $user->employee->brief_description}}</p>
-                </article>
-            </div>
+            @endforeach
         </section>
 
-        <section>
-			<div class="sectionTitle">
-				<h1>Roles and Contribution</h1>
-			</div>
-			
-			<div class="sectionContent">
-				<article>
-					<p>{{ $user->employee->role_and_contributions }}</p>
-				</article>
-			</div>
-            <div class="clear"></div>
-		</section>
 
-        <section>
-            <div class="title">Skill</div>
+        <section class="summary-section">
+            <div class="title">Certification</div>
 			<div class="sectionTitle">
 				<h1>Certification</h1>
 			</div>
@@ -516,7 +551,7 @@
 			</div>
 		</section>
 
-        <section>
+        <section class="summary-section">
 			<div class="sectionTitle">
 				<h1>Issuing Organization</h1>
 			</div>
@@ -529,7 +564,7 @@
 			<div class="clear"></div>
 		</section>
 
-        <section>
+        <section class="summary-section">
             <div class="title">Languages</div>
 			<div class="sectionTitle">
 				<h1>languages</h1>
@@ -544,7 +579,7 @@
 			</div>
 		</section>
 
-        <section>
+        <section class="summary-section">
 			<div class="sectionTitle">
 				<h1>proficiency Level of Languages</h1>
 			</div>
@@ -557,7 +592,7 @@
 			<div class="clear"></div>
 		</section>
 
-		<section>
+		<section class="summary-section">
 			<div class="title">Personal Details</div>
 			
 			<div class=" marginFooter">

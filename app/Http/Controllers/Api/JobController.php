@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\JobPost;
+use App\Models\Employee;
 use Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
@@ -28,7 +29,7 @@ class JobController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-     public function createJobPost(Request $request)
+     public function createJob(Request $request)
     {
         $userid = Auth::user()->id;
         $jobpost = new JobPost();
@@ -40,23 +41,24 @@ class JobController extends Controller
         return response()->json($jobpost);
     }
 
-    public function jobGetonEmployee()
+    public function getEmployeeJob() 
     {
         $userid = Auth::user()->id;
         $user = User::find($userid);
         $userJobPosts = $user->jobPosts;
+        $userFavJob = $user->favouriteJob;
         $job = JobPost::get();
-        return response()->json(['job'=>$job,'userJobPosts'=>$userJobPosts]);
+        return response()->json(['job'=>$job,'userJobPosts'=>$userJobPosts,'userFavJob'=>$userFavJob]);
     }
 
-    public function jobGetonEmployer()
+    public function getJobEmployer()
     {
         $userid = Auth::user()->id;
         $job = JobPost::where('user_id',$userid)->get();
         return response()->json(['job'=>$job]);
     }
 
-    public function jobSearchEmployer(Request $request)
+    public function searchEmployerJob(Request $request)
     {
         $query = JobPost::query();
 
@@ -65,7 +67,7 @@ class JobController extends Controller
             $query->where('title', 'like', '%' . $request->input('keyword') . '%')
                   ->orWhere('location', 'like', '%' . $request->input('keyword') . '%');
         }
-    
+
         $results = $query->get();
         return response()->json($results);
     }
@@ -94,4 +96,41 @@ class JobController extends Controller
         return response()->json($jobPost);
     }
 
+
+    public function favJobEmployee($id)
+    {
+        $userId = Auth::user()->id;
+        $user = User::find($userId);
+        $favJobPost = JobPost::find($id); // Corrected variable name
+    
+        if ($user->favouriteJob()->where('job_id', $favJobPost->id)->exists()) 
+        {
+            $data = $user->favouriteJob()->detach($favJobPost->id);
+        } 
+        else 
+        {
+            $user->favouriteJob()->attach($favJobPost->id);
+        }
+    
+        $userFavJob = $user->favouriteJob()->wherePivot('job_id', $id)->first();
+        return response()->json($userFavJob);
+    }
+
+    public function employeeFavJob()
+    {
+        $user_id = Auth::user()->id;
+        $user = User::find($user_id);
+        $fav_job = $user->favouriteJob;
+        return response()->json($fav_job);
+    }
+
+    public function getEmployee()
+    { 
+         $user_id = user::get();
+         $user = User::find($user_id);
+        $emp = Employee::join('users','employees.employee_id','=','users.id')
+                ->select('users.name','users.id')
+                ->get();
+        return $emp;
+    }
 }

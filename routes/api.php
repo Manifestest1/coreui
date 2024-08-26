@@ -3,9 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\JobController;  
-use App\Http\Controllers\Api\ContactController;  
-use App\Http\Controllers\ProjectController;  
+use App\Http\Controllers\Api\JobController;
+use App\Http\Controllers\Api\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,37 +13,42 @@ use App\Http\Controllers\ProjectController;
 |
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great! 
+| be assigned to the "api" middleware group. Make something great!
 |
 */
-
-Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) 
+Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
 {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/login-superadmin', [AuthController::class, 'loginForSuperadmin']);
-    Route::post('/register', [AuthController::class, 'register']); 
+    Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh-token', [AuthController::class, 'refresh']);
-    Route::get('/user-profile', [AuthController::class, 'userProfile']);    
-    Route::post('/update-profile', [AuthController::class, 'updateProfile']);   
+    Route::get('/user-profile', [AuthController::class, 'userProfile']);
+    Route::post('/update-profile', [AuthController::class, 'updateProfile']);
     Route::post('/create-profile', [AuthController::class, 'createProfile']);
-    Route::post('/update-employee-profile', [AuthController::class, 'updateEmployeeProfile']);  
-    Route::post('/update-employer-profile', [AuthController::class, 'updateEmployerProfile']);  
-    Route::get('/public-profile-employee/{id}', [AuthController::class, 'publicProfileOfEmployee']);  
- 
-    // Job Url
-    Route::post('/create-jobpost', [JobController::class, 'createJobPost']);
-    Route::get('/job-get-employee', [JobController::class, 'jobGetonEmployee']); 
-    Route::post('/job-search-employer', [JobController::class, 'jobSearchEmployer']); 
-    Route::get('/job-view/{id}', [JobController::class, 'jobViewOnEmployee']);    
-    Route::get('/job-apply/{id}', [JobController::class, 'jobApplyOnEmployee']);  
-    Route::get('/job-get-employer', [JobController::class, 'jobGetonEmployer']);
-    Route::get('/job-view-employer/{id}', [JobController::class, 'jobViewOnEmployer']); 
-    
-    Route::post('/create-contact', [ContactController::class, 'createContact']);
-    Route::get('/employee-download-pdf/{id}', [AuthController::class,'generatepdf']);
+    Route::post('/update-employee-profile', [AuthController::class, 'updateEmployeeProfile']);
+    Route::post('/update-employer-profile', [AuthController::class, 'updateEmployerProfile']);
+    Route::get('/public-profile-employee/{id}', [AuthController::class, 'emplyeePublicProfile']);
 
-    Route::get('/show-projects', [ProjectController::class,'index']);
-    Route::get('/create-projects', [ProjectController::class,'store']);
-      
-}); 
+    // Route::get('/get-country', [AuthController::class, 'getCountries']);
+    // Route::get('/get-state/{countryId}', [AuthController::class, 'getStates']);
+    // Route::get('/get-city/{id}', [AuthController::class, 'getCity']);
+
+
+    // Job Url
+    Route::post('/create-jobpost', [JobController::class, 'createJob']);
+    Route::get('/job-get-employee', [JobController::class, 'getEmployeeJob']);
+    Route::post('/job-search-employer', [JobController::class, 'searchEmployerJob']);
+    Route::get('/job-view/{id}', [JobController::class, 'jobViewOnEmployee']);
+    Route::get('/job-apply/{id}', [JobController::class, 'jobApplyOnEmployee']);
+    Route::get('/job-get-employer', [JobController::class, 'getJobEmployer']);
+    Route::get('/job-view-employer/{id}', [JobController::class, 'jobViewOnEmployer']);
+    Route::get('/fav-job-employee/{id}',[JobController::class,'favJobEmployee']);
+
+    Route::get('/employee-fav-job ',[JobController::class,'EmployeeFavJob']);
+    Route::get('/get-employee',[JobController::class,'getEmployee']);
+
+    // Route::post('/send-email', [ContactController::class, 'sendMail']);
+    Route::post('/contact-mail-send', [ContactController::class, 'contactSendMail']);
+    Route::get('employee-download-pdf/{id}', [AuthController::class, 'generatepdf']);
+});
