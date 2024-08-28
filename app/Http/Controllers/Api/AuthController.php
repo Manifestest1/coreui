@@ -13,6 +13,7 @@ use Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Project;
+use App\Models\Certificate;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
@@ -250,7 +251,7 @@ class AuthController extends Controller
         if($user->role_id == 1)
         {
             $user->update();
-            $user = User::with(['projects', 'employee'])->find($userid);
+            $user = User::with(['projects', 'employee', 'certificates'])->find($userid);
         }
         else
         {
@@ -281,7 +282,7 @@ class AuthController extends Controller
         if ($user) 
         {
             $user->employee()->update([
-                'marital_status' => $request->marital_status,
+                'marriage_status' => $request->marriage_status,
                 'phone' => $request->phone,
                 'current_address' => $request->current_address,
                 'permanent_address' => $request->permanent_address,
@@ -312,9 +313,6 @@ class AuthController extends Controller
                 'linkedIn_profile' => $request->linkedIn_profile,
                 'proficiency_level_of_language' => $request->proficiency_level_of_language,
                 'References' => $request->References,
-                'issuing_organization' => $request->issuing_organization,
-                'certification_name' => $request->certification_name,
-                'date_of_certification' => $request->date_of_certification,
 
 
             ]);
@@ -338,7 +336,21 @@ class AuthController extends Controller
            ]);
        }
 
-        $user = User::with('employee')->find($userId);
+       $result = $request->input('result');
+
+       $certificates = json_decode($result, true);
+
+       foreach ($certificates as $certificateData) 
+       {
+        Certificate::create([
+               'employee_id' => $userId,
+               'certificate_name' => $certificateData['certificate_name'],
+               'date_of_certification' => $certificateData['date_of_certification'],
+               'issuing_organization' => $certificateData['issuing_organization'],
+           ]);
+       }
+
+        $user = User::with('employee','certificates', 'projects')->find($userId);
 
         return response()->json($user);
     }
@@ -392,7 +404,7 @@ class AuthController extends Controller
 
     public function generatepdf($id)
     {
-        $user = User::where('id',$id)->with('employee','projects')->first();  
+        $user = User::where('id',$id)->with('employee','projects','certificates')->first();  
     
         $imageUrl = "https://staging.fyies.com/jobsite/backend/public/uploads/1723803210_user_profile.jpg";
 
@@ -401,7 +413,7 @@ class AuthController extends Controller
             $imageData = file_get_contents($imageUrl);
             $base64 = base64_encode($imageData);
             $base64Image = 'data:image/jpeg;base64,' . $base64; // Adjust MIME type based on actual image type
-             return view('pdf', ['user' => $user, 'imageUrl' => $base64Image]);
+            //return view('pdf', ['user' => $user, 'imageUrl' => $base64Image]);
             $html = view('pdf', ['user' => $user, 'imageUrl' => $base64Image])->render();
             
             $options = new Options();

@@ -11,6 +11,7 @@ use App\Models\JobPost;
 use App\Models\Employee;
 use App\Models\Employer;
 use App\Models\Project;
+use App\Models\Certificate;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -76,6 +77,11 @@ class User extends Authenticatable implements JWTSubject
     public function projects()
     {
         return $this->hasMany(Project::class,'employee_id','id'); 
+    }
+
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class,'employee_id','id'); 
     }
 
     public function employer()

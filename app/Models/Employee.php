@@ -24,7 +24,7 @@ class Employee extends Model
         'current_working_skill',
         'languages',
         'hobbies',
-        'marital_status',
+        'marriage_status',
         'city',
         'state',
         'country',
@@ -43,9 +43,6 @@ class Employee extends Model
         'linkedIn_profile',
         'proficiency_level_of_language',
         'References',
-        'issuing_organization',
-        'certification_name',
-        'date_of_certification',
     ];
 
     public function user()

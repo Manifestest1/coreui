@@ -1,80 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<style>
-		html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary,time,mark,audio,video {
-    border:0;
-    font:inherit;
-    font-size:100%;
-    margin:0;
-    padding:0;
-    vertical-align:baseline;
+    <style>
+    /* Basic Reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
 
-    article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {
-    display:block;
-    }
-
-    html, body {background: #181818; font-family:  helvetica, arial, sans-serif; font-size: 16px; color: #222;}
-
-    .clear {
-        clear: both;
-        border-top: 1px solid #dedede;
-        margin-top: 20px;
+    html, body {
+        background: #181818;
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        color: #222;
     }
 
     #cv {
-        width: 90%;
-        max-width: 800px;
-        background: #f3f3f3;
-        margin: 30px auto;
+    width: calc(90% - 50px); 
+    max-width: 800px;
+    background: #f3f3f3;
+    margin: 30px auto;
+    padding-left: 25px; 
+    padding-right: 25px;
     }
 
-    .mainDetails {
-        
-        padding: 25px 35px;
-        border-bottom: 2px solid #cf8a05;
+    .mainDetails, .mainFooter {
+        padding: 20px;
         background: #ededed;
-    }
-
-    h1, p {
-        margin: 0;
-        padding: 0;
-    }
-
-    .mainFooter {
-        border-top: 2px solid #cf8a05;
-        padding: 25px 35px;
-    }
-
-    #name h1 {
-        font-size: 2.5em;
-        font-weight: 700;
-        font-family:  Helvetica, Arial, sans-serif;
-        margin-bottom: -6px;
-    }
-
-    #name h2 {
-        font-size: 2em;
-        margin-left: 2px;
-        font-family: Helvetica, Arial, sans-serif;
-    }
-
-    #mainArea {
-        padding: 0 40px;
+        border-bottom: 2px solid #cf8a05;
     }
 
     #headshot {
-        width: 12.5%;
+        width: 100px;
         float: left;
-        margin-right: 30px;
+        margin-right: 20px;
     }
 
     #headshot img {
-        width: 100px;
-        height: 100px;
-        -webkit-border-radius: 50px;
-        border-radius: 50px;
+        width: 100%;
+        height: auto;
+        border-radius: 50%;
     }
 
     #name {
@@ -83,245 +49,95 @@
 
     #contactDetails {
         float: right;
+        text-align: right;
     }
 
     #contactDetails ul {
-        list-style-type: none;
+        list-style: none;
         font-size: 0.9em;
-        margin-top: 2px;
+        margin-top: 0;
     }
 
     #contactDetails ul li {
-        margin-bottom: 3px;
+        margin-bottom: 5px;
+    }
+
+    #contactDetails a {
         color: #444;
-    }
-
-    #contactDetails ul li a, a[href^=tel] {
-        color: #444; 
         text-decoration: none;
-        -webkit-transition: all .3s ease-in;
-        -moz-transition: all .3s ease-in;
-        -o-transition: all .3s ease-in;
-        -ms-transition: all .3s ease-in;
-        transition: all .3s ease-in;
     }
 
-    #contactDetails ul li a:hover { 
+    #contactDetails a:hover {
         color: #cf8a05;
     }
 
-    section:first-child {
-        border-top: 0;
+    .clear {
+        clear: both;
+        border-top: 1px solid #dedede;
     }
 
-    section:last-child {
-        padding: 20px 0 10px;
+    section {
+        margin-bottom: 20px;
     }
 
     .sectionTitle {
-        float: left;
-        width: 25%;
+        font-size: 1.2em;
+        color: #cf8a05;
+        margin-bottom: 10px;
+    }
+
+    .title {
+        font-size: 1.5em;
+        margin-bottom: 10px;
     }
 
     .sectionContent {
-        float: right;
-        width: 72.5%;
-        flex: 3;
-    }
-
-    .sectionTitle h1 {
-        font-family:  Helvetica, Arial, sans-serif;
-        font-style: Arial;
-        font-size: .9em;
-        color: #cf8a05;
-    }
-
-    p.sectionTitle{
-        color: #cf8a05;
-    }
-
-    .sectionContent h2 {
-        font-size: 0.9em;
-    }
-
-    .subDetails {
-        font-size: 0.8em;
-        font-style: Arial;
-        margin-bottom: 3px;
+        margin-left: 0;
     }
 
     .keySkills {
-        list-style-type: none;
-        -moz-column-count:3;
-        -webkit-column-count:3;
-        column-count:3;
+        list-style: none;
         margin-bottom: 20px;
-        font-size: .9em;
         color: #444;
-        list-style-position: inside;
     }
 
-    .marginFooter{
-        margin-bottom: 20px;
+    .keySkills li {
+        margin-bottom: 5px;
     }
 
-    li::marker {
-    color: #cf8a05; 
-    }
-
-    li {
-        list-style-type: disc;
-        font-size: .9em;
-        list-style-position: inside;
-     }
-
-    .keySkills ul li {
-        margin-bottom: 3px;
-    }
-
-    @media all and (min-width: 602px) and (max-width: 800px) 
-    {
-      
-        
-        .keySkills {
-        -moz-column-count:2;
-        -webkit-column-count:2;
-        column-count:2;
-        }
-    }
-
-    @media all and (max-width: 601px) {
-        #cv {
-            width: 95%;
-            margin: 10px auto;
-            min-width: 280px;
-        }
-        
-      
-        
+    @media (max-width: 800px) {
         #name, #contactDetails {
             float: none;
             width: 100%;
             text-align: center;
         }
-        
+
         .sectionTitle, .sectionContent {
             float: none;
             width: 100%;
         }
-        
-        .sectionTitle {
-            margin-left: -2px;
-            font-size: 1.25em;
-        }
-        
+
         .keySkills {
-            -moz-column-count:2;
-            -webkit-column-count:2;
-            column-count:2;
+            column-count: 2;
         }
     }
 
-    @media all and (max-width: 480px) {
-        .mainDetails {
-            padding: 15px 15px;
-        }
-        
-        section {
-            padding: 15px 0 0;
-        }
-        
-        #mainArea {
-            padding: 0 15px;
+    @media (max-width: 480px) {
+        #cv {
+            width: calc(95% - 20px); 
+            margin: 10px auto;
         }
 
-        
+        .mainDetails, .mainFooter {
+            padding: 15px;
+        }
+
         .keySkills {
-        -moz-column-count:1;
-        -webkit-column-count:1;
-        column-count:1;
-        }
-        
-        #name h1 {
-            line-height: .8em;
-            margin-bottom: 3px;
+            column-count: 1;
         }
     }
-    
 
-    .instaFade {
-        -webkit-animation-name: reset, fade-in;
-        -webkit-animation-duration: 1.5s;
-        -webkit-animation-timing-function: ease-in;
-        
-        -moz-animation-name: reset, fade-in;
-        -moz-animation-duration: 1.5s;
-        -moz-animation-timing-function: ease-in;
-        
-        animation-name: reset, fade-in;
-        animation-duration: 1.5s;
-        animation-timing-function: ease-in;
-    }
-
-    .quickFade {
-        -webkit-animation-name: reset, fade-in;
-        -webkit-animation-duration: 2.5s;
-        -webkit-animation-timing-function: ease-in;
-        
-        -moz-animation-name: reset, fade-in;
-        -moz-animation-duration: 2.5s;
-        -moz-animation-timing-function: ease-in;
-        
-        animation-name: reset, fade-in;
-        animation-duration: 2.5s;
-        animation-timing-function: ease-in;
-    }
-    #pdf1{
-        margin-top: 10px;
-        }
-    .title{
-        font-family:  Helvetica, Arial, sans-serif;
-        font-style: Arial;
-        font-size: 1.25em;
-        margin-bottom: 20px;
-        margin-top: 20px;
-        text-align: left;
-        font-weight: bold;
-        
-    }
-
-    .summary-section {
-    display: block;
-    padding: 10px; 
-    clear: both; 
-}
-
-.section-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.sectionTitle {
-    flex: 1; 
-    margin-right: 10px; 
-}
-
-.sectionContent {
-    flex: 3; 
-}
-
-.project-container {
-    padding-bottom: 20px;
-}
-
-p {
-    font-size: .9em;
-    line-height: 1.4em;
-    margin-bottom: 10px;
-    color: #444;
-}
-	</style>
+    </style>
 </head>
 <body id="top">
 <div id="cv" class="instaFade">
@@ -345,9 +161,9 @@ p {
         </div>
         <div id="mainArea" class="quickFade delayFive">
             <section class="summary-section">
-                    <div class="title">Professional Summary</div>
+                    <div class="title">Professional Summary :-</div>
                     <div class="sectionTitle">
-                        <h1>Objective</h1>
+                        <p>Objective</p>
                     </div>
                     <div class="sectionContent">
                         <article>
@@ -358,7 +174,7 @@ p {
 		
 		<section class="summary-section">
 			<div class="sectionTitle">
-				<h1>Work Experience</h1>
+				<p>Work Experience</p>
 			</div>
 			<div class="sectionContent">
 				<article>
@@ -369,7 +185,7 @@ p {
 		
 		<section class="summary-section">
 			<div class="sectionTitle">
-				<h1>Current Working Skill</h1>
+				<p>Current Working Skill</p>
 			</div>
 			
 			<div class="sectionContent">
@@ -382,9 +198,9 @@ p {
 		
 		
 		<section class="summary-section">
-            <div class="title">Qualification</div>
+            <div class="title">Qualification :-</div>
 			<div class="sectionTitle">
-				<h1>Heighest Qualification</h1>
+				<p>Heighest Qualification</p>
 			</div>
 			
 			<div class="sectionContent">
@@ -396,7 +212,7 @@ p {
 
         <section class="summary-section">
 			<div class="sectionTitle">
-				<h1>Degree</h1>
+				<p>Degree</p>
 			</div>
 			
 			<div class="sectionContent">
@@ -408,7 +224,7 @@ p {
 
         <section class="summary-section">
 			<div class="sectionTitle">
-				<h1>University or college name</h1>
+				<p>University or college name</p>
 			</div>
 			
 			<div class="sectionContent">
@@ -420,7 +236,7 @@ p {
 
         <section class="summary-section">
 			<div class="sectionTitle">
-				<h1>Graduation Date</h1>
+				<p>Graduation Date</p>
 			</div>
 			
 			<div class="sectionContent">
@@ -432,9 +248,9 @@ p {
 		</section>
 
         <section class="summary-section">
-            <div class="title">Work Experience</div>
+            <div class="title">Work Experience :-</div>
 			<div class="sectionTitle">
-				<h1>Company Name</h1>
+				<p>Company Name</p>
 			</div>
 			
 			<div class="sectionContent">
@@ -446,7 +262,7 @@ p {
 
         <section class="summary-section">
 			<div class="sectionTitle">
-				<h1>Date of Employment</h1>
+				<p>Date of Employment</p>
 			</div>
 			
 			<div class="sectionContent">
@@ -458,7 +274,7 @@ p {
 
         <section class="summary-section">
             <div class="sectionTitle">
-                <h1>Working From</h1>
+                <p>Working From</p>
             </div>
             
             <div class="sectionContent">
@@ -470,7 +286,7 @@ p {
 
         <section class="summary-section">
             <div class="sectionTitle">
-                <h1>Location</h1>
+                <p>Location</p>
             </div>
             
             <div class="sectionContent">
@@ -482,7 +298,7 @@ p {
 
         <section class="summary-section">
             <div class="sectionTitle">
-                <h1>Responsibilities and Achievements</h1>
+                <p>Responsibilities and Achievements</p>
             </div>
             
             <div class="sectionContent">
@@ -494,12 +310,12 @@ p {
         </section>
 
         <section class="summary-section">
-            <div class="title">Projects</div>
+            <div class="title">Projects :-</div>
             @foreach ($user->projects as $project )
-            <div class="project-container">
-                <div class="section-container">
+            <div >
+                <div >
                     <div class="sectionTitle">
-                        <h1>Project Name</h1>
+                        <p>Project Name</p>
                     </div>
                     <div class="sectionContent">
                         <article>
@@ -508,9 +324,9 @@ p {
                     </div>
                 </div>
 
-                <div class="section-container">
+                <div >
                     <div class="sectionTitle">
-                        <h1>Brief Description</h1>
+                        <p>Brief Description</p>
                     </div>
                     <div class="sectionContent">
                         <article>
@@ -519,13 +335,24 @@ p {
                     </div>
                 </div>
 
-                <div class="section-container">
+                <div >
                     <div class="sectionTitle">
-                        <h1>Roles and Contribution</h1>
+                        <p>Roles and Contribution</p>
                     </div>
                     <div class="sectionContent">
                         <article>
                             <p>{{ $project->role_and_contributions }}</p>
+                        </article>
+                    </div>
+                </div>
+
+                <div >
+                    <div class="sectionTitle">
+                        <p>Technologies Used</p>
+                    </div>
+                    <div class="sectionContent">
+                        <article>
+                            <p>{{ $project->Technologies_used }}</p>
                         </article>
                     </div>
                 </div>
@@ -536,38 +363,63 @@ p {
 
 
         <section class="summary-section">
-            <div class="title">Certification</div>
-			<div class="sectionTitle">
-				<h1>Certification</h1>
-			</div>
+            <div class="title">Certificates :-</div>
+            @foreach ($user->certificates as $certificates)
+            <div class="project-container">
+                <div >
+                    <div class="sectionTitle">
+                        <p>Certficate Name</p>
+                    </div>
+                    <div class="sectionContent">
+                        <article>
+                            <p>{{ $certificates->certificate_name }}</p>
+                        </article>
+                    </div>
+                </div>
 
-            <div class="sectionContent">
-				<ul class="keySkills">
-                    @foreach(explode(',', $user->employee->certifications) as $certification)
-                            <li>{{ trim($certification) }}</li>
-                            <li>{{ $user->employee->date_of_certification }}</li>
-                    @endforeach
-				</ul>
-			</div>
-		</section>
+                <div >
+                    <div class="sectionTitle">
+                        <p>Date of Certification </p>
+                    </div>
+                    <div class="sectionContent">
+                        <article>
+                            <p>{{ $certificates->date_of_certification }}</p>
+                        </article>
+                    </div>
+                </div>
+
+                <div >
+                    <div class="sectionTitle">
+                        <p>Issuing Organization</p>
+                    </div>
+                    <div class="sectionContent">
+                        <article>
+                            <p>{{ $certificates->issuing_organization }}</p>
+                        </article>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            @endforeach
+        </section>
 
         <section class="summary-section">
 			<div class="sectionTitle">
-				<h1>Issuing Organization</h1>
+				<p>Certifications</p>
 			</div>
 			
 			<div class="sectionContent">
 				<article>
-					<p>{{ $user->employee->issuing_organization }}</p>
+					<p>{{ $user->employee->certifications }}</p>
 				</article>
 			</div>
 			<div class="clear"></div>
 		</section>
 
         <section class="summary-section">
-            <div class="title">Languages</div>
+            <div class="title">Languages :-</div>
 			<div class="sectionTitle">
-				<h1>languages</h1>
+				<p>languages</p>
 			</div>
 			
 			<div class="sectionContent">
@@ -577,23 +429,11 @@ p {
                     @endforeach
 			</ul>
 			</div>
-		</section>
-
-        <section class="summary-section">
-			<div class="sectionTitle">
-				<h1>proficiency Level of Languages</h1>
-			</div>
-			
-			<div class="sectionContent">
-				<article>
-					<p>{{ $user->employee->proficiency_level_of_language }}</p>
-				</article>
-			</div>
 			<div class="clear"></div>
 		</section>
 
 		<section class="summary-section">
-			<div class="title">Personal Details</div>
+			<div class="title">Personal Details :-</div>
 			
 			<div class=" marginFooter">
 				<article>
@@ -605,7 +445,7 @@ p {
                     <p class="sectionTitle">Country:  </p><p class="sectionContent">{{ $user->employee->country }}</p>
                     <p class="sectionTitle">Pin Code:  </p><p class="sectionContent">{{ $user->employee->pincode }}</p>
                     <p class="sectionTitle">Gender:  </p><p class="sectionContent">{{ $user->employee->gender }}</p>
-                    <p class="sectionTitle">Marital Status:  </p><p class="sectionContent">{{ $user->employee->marital_status }}</p>
+                    <p class="sectionTitle">Marital Status:  </p><p class="sectionContent">{{ $user->employee->marriage_status }}</p>
 				</article>
 			</div>
 			<div class="clear mainFooter "></div>
