@@ -51,15 +51,20 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
 
     // Route::post('/send-email', [ContactController::class, 'sendMail']);
     Route::post('/contact-mail-send', [ContactController::class, 'contactSendMail']);
-    Route::get('employee-download-pdf/{id}', [AuthController::class, 'generatepdf']);
+    Route::get('/employee-download-pdf/{id}', [AuthController::class, 'generatepdf']);
 });
 
 Route::prefix('admin')->group(function () {
-    Route::post('login', [AdminController::class, 'login']);
-    Route::get('profile', [AdminController::class, 'adminProfile']);
-    Route::get('users-list', [AdminController::class, 'getUsersList']);
-    Route::get('users-delete/{id}', [AdminController::class, 'userDelete']);
+    Route::post('/login', [AdminController::class, 'login']);
+    Route::get('/profile', [AdminController::class, 'adminProfile']);
+    Route::get('/users-list', [AdminController::class, 'getUsersList']);
+    Route::get('/users-delete/{id}', [AdminController::class, 'userDelete']);
     Route::post('/users-update/{id}', [AdminController::class, 'updateUser']);
     Route::post('/users-edit/{id}', [AdminController::class, 'editUser']);
-    Route::post('logout', [AdminController::class, 'logout']);
+    Route::post('/logout', [AdminController::class, 'logout']);
+    Route::get('/meta-tags', [AdminController::class, 'showMetaTag']);
+    Route::get('/meta-tags-add', [AdminController::class, 'metaTagAdd']);
+    Route::get('/meta-tags-edit/{id}', [AdminController::class, 'metaTagEdit']);
+    Route::get('/meta-tags-update/{id}', [AdminController::class, 'metaTagUpdate']);
+    Route::get('/meta-tags-delete/{id}', [AdminController::class, 'metaTagDelete']);
 });

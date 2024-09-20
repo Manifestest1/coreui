@@ -398,7 +398,7 @@ class AuthController extends Controller
 
     public function emplyeePublicProfile($id)
     {
-        $user = User::with('employee')->find($id);
+        $user = User::with('employee','projects','certificates')->find($id);
         return response()->json($user);
     }
 

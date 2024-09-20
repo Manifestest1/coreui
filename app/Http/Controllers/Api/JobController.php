@@ -125,12 +125,14 @@ class JobController extends Controller
     }
 
     public function getEmployee()
-    { 
-         $user_id = user::get();
-         $user = User::find($user_id);
-        $emp = Employee::join('users','employees.employee_id','=','users.id')
-                ->select('users.name','users.id')
+    {
+        // Fetch users with role_id = 1
+        $emp = Employee::join('users', 'employees.employee_id', '=', 'users.id')
+                ->where('users.role_id', 1) // Filter by role_id
+                ->select('users.name', 'users.id')
                 ->get();
+        
         return $emp;
     }
+    
 }

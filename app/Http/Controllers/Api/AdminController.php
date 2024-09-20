@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Admin;
 use App\Models\User;
+use App\Models\Page;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AdminController extends Controller
@@ -14,7 +15,7 @@ class AdminController extends Controller
     public function __construct()
     {
         // Use 'auth:admin' middleware for protected routes
-        $this->middleware('auth:admin', ['except' => ['login','getUsersList']]);
+        $this->middleware('auth:admin', ['except' => ['login','getUsersList','showMetaTag']]);
     }
 
     public function login(Request $request)
@@ -43,16 +44,16 @@ class AdminController extends Controller
     }
 
     public function editUser($id)
-{
-    $data = User::find($id);
-    if (!$data) {
-        return response()->json(['message' => 'user not found.'], 404);
+    {
+        $data = User::find($id);
+        if (!$data) {
+            return response()->json(['message' => 'user not found.'], 404);
+        }
+        return response()->json([
+            'message' => 'user retrieved successfully',
+            'data' => $data
+        ], 200);
     }
-    return response()->json([
-        'message' => 'user retrieved successfully',
-        'data' => $data
-    ], 200);
-}
 
     public function adminProfile()
     {
@@ -122,5 +123,74 @@ class AdminController extends Controller
         Auth::guard('admin')->logout();
 
         return response()->json(['message' => 'Logged out successfully']);
+    }
+
+    public function showMetaTag()
+    {
+        $pages = Page::select('title', 'description', 'keywords', 'url')->get();
+    
+        if ($pages->isEmpty()) {
+            return response()->json(['error' => 'No pages found'], 404);
+        }
+        
+        return response()->json($pages);
+    }
+
+    public function metaTagEdit($id)
+    {
+        $page = Page::find($id);
+        
+        if (!$page) {
+            return response()->json(['message' => 'Page not found'], 404);
+        }
+        
+        return response()->json($page);
+    }
+
+    public function metaTagAdd(Request $request)
+    {
+        $validated = $request->validate([
+            'url' => 'required|string|unique:pages',
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'keywords' => 'required|string',
+        ]);
+
+        $page = Page::create($validated);
+
+        return response()->json(['message' => 'Page created successfully', 'page' => $page], 201);
+    }
+
+    public function metaTagUpdate(Request $request, $id)
+    {
+        $page = Page::find($id);
+
+        if (!$page) {
+            return response()->json(['message' => 'Page not found'], 404);
+        }
+
+        $validated = $request->validate([
+            'url' => 'required|string|unique:pages,url,' . $id, 
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'keywords' => 'required|string',
+        ]);
+
+        $page->update($validated);
+
+        return response()->json(['message' => 'Page updated successfully', 'page' => $page], 200);
+    }
+
+    public function metaTagDelete($id)
+    {
+        $page = Page::find($id);
+
+        if (!$page) {
+            return response()->json(['message' => 'Page not found'], 404);
+        }
+
+        $page->delete();
+
+        return response()->json(['message' => 'Page deleted successfully'], 200);
     }
 }
