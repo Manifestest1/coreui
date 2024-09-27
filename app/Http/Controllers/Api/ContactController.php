@@ -58,7 +58,7 @@ class ContactController extends Controller
             'link' => $link,
         ];
 
-        //Mail::to('nishatirole28@gmail.com')->send(new ContactSendMail($data));
+        Mail::to('nishatirole28@gmail.com')->send(new ContactSendMail($data));
 
         return "Email has been sent!";
     }

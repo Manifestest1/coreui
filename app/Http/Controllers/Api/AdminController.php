@@ -127,7 +127,7 @@ class AdminController extends Controller
 
     public function showMetaTag()
     {
-        $pages = Page::select('title', 'description', 'keywords', 'url')->get();
+        $pages = Page::select('id','title', 'description', 'keywords', 'url')->get();
     
         if ($pages->isEmpty()) {
             return response()->json(['error' => 'No pages found'], 404);

@@ -63,8 +63,8 @@ Route::prefix('admin')->group(function () {
     Route::post('/users-edit/{id}', [AdminController::class, 'editUser']);
     Route::post('/logout', [AdminController::class, 'logout']);
     Route::get('/meta-tags', [AdminController::class, 'showMetaTag']);
-    Route::get('/meta-tags-add', [AdminController::class, 'metaTagAdd']);
+    Route::post('/meta-tags-add', [AdminController::class, 'metaTagAdd']);
     Route::get('/meta-tags-edit/{id}', [AdminController::class, 'metaTagEdit']);
-    Route::get('/meta-tags-update/{id}', [AdminController::class, 'metaTagUpdate']);
-    Route::get('/meta-tags-delete/{id}', [AdminController::class, 'metaTagDelete']);
+    Route::post('/meta-tags-update/{id}', [AdminController::class, 'metaTagUpdate']);
+    Route::delete('/meta-tags-delete/{id}', [AdminController::class, 'metaTagDelete']);
 });
