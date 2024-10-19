@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('employee_id');
             $table->string('project_name');
             $table->string('brief_description');
-            $table->string('role_and_contributions');
-            $table->string('Technologies_used'); 
+            $table->string('role_of_employee');
+            $table->string('technologies_used'); 
 
             $table->foreign('employee_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
