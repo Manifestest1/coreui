@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('_certificte', function (Blueprint $table) {
+        Schema::create('educations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('employee_id');
-            $table->string('certifications');
-            $table->string('date_of_certification');
-            $table->foreign('employee_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('institution_names');
+            $table->string('course')->nullable();
+            $table->integer('from_year')->nullable();
+            $table->integer('to_year')->nullable();
+            $table->string('grading', 50)->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('_certificte');
+        Schema::dropIfExists('educations');
     }
 };

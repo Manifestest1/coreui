@@ -9,20 +9,17 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('marriage_status', ['married', 'unmarried'])->nullable();
+            $table->string('google_id')->nullable()->after('email'); // Add google_id after the email column
         });
     }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    
+    public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('marriage_status');
+            $table->dropColumn('google_id');
         });
     }
 };

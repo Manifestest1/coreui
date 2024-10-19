@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\JobController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\PdfController;
+use App\Http\Controllers\Api\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,20 +22,16 @@ use App\Http\Controllers\Api\AdminController;
 Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
 {
     Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/login-superadmin', [AuthController::class, 'loginForSuperadmin']);
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh-token', [AuthController::class, 'refresh']);
-    Route::get('/user-profile', [AuthController::class, 'userProfile']);
-    Route::post('/update-profile', [AuthController::class, 'updateProfile']);
-    Route::post('/create-profile', [AuthController::class, 'createProfile']);
-    Route::post('/update-employee-profile', [AuthController::class, 'updateEmployeeProfile']);
-    Route::post('/update-employer-profile', [AuthController::class, 'updateEmployerProfile']);
-    Route::get('/public-profile-employee/{id}', [AuthController::class, 'emplyeePublicProfile']);
 
-    // Route::get('/get-country', [AuthController::class, 'getCountries']);
-    // Route::get('/get-state/{countryId}', [AuthController::class, 'getStates']);
-    // Route::get('/get-city/{id}', [AuthController::class, 'getCity']);
+    Route::get('/user-profile', [ProfileController::class, 'userProfile']);
+    Route::post('/update-profile', [ProfileController::class, 'updateProfile']);
+    Route::post('/create-profile', [ProfileController::class, 'createProfile']);
+    Route::post('/update-employee-profile', [ProfileController::class, 'updateEmployeeProfile']);
+    Route::post('/update-employer-profile', [ProfileController::class, 'updateEmployerProfile']);
+    Route::get('/public-profile-employee/{id}', [ProfileController::class, 'emplyeePublicProfile']);
 
 
     // Job Url
@@ -45,13 +43,13 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router)
     Route::get('/job-get-employer', [JobController::class, 'getJobEmployer']);
     Route::get('/job-view-employer/{id}', [JobController::class, 'jobViewOnEmployer']);
     Route::get('/fav-job-employee/{id}',[JobController::class,'favJobEmployee']);
-
     Route::get('/employee-fav-job ',[JobController::class,'EmployeeFavJob']);
     Route::get('/get-employee',[JobController::class,'getEmployee']);
 
     // Route::post('/send-email', [ContactController::class, 'sendMail']);
     Route::post('/contact-mail-send', [ContactController::class, 'contactSendMail']);
-    Route::get('/employee-download-pdf/{id}', [AuthController::class, 'generatepdf']);
+
+    Route::get('/employee-download-pdf/{id}', [PdfController::class, 'generatepdf']);
 });
 
 Route::prefix('admin')->group(function () {

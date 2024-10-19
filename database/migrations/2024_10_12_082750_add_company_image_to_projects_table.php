@@ -9,10 +9,11 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('marital_status');
+        Schema::table('projects', function (Blueprint $table) {
+            // Add the company_image column
+            $table->string('company_image')->nullable(); 
         });
     }
 
@@ -21,8 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->boolean('marital_status')->default(0);
+        Schema::table('projects', function (Blueprint $table) {
+            $table->dropColumn('company_image');
         });
     }
 };

@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('current_working_skill')->nullable();
             $table->string('languages')->nullable();
             $table->string('hobbies')->nullable();
+            $table->string('gender')->nullable();
             $table->unsignedTinyInteger('marital_status')->nullable();
 
             $table->string('city')->nullable(); 

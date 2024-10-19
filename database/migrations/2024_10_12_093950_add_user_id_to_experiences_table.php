@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('marriage_status');
+        Schema::table('experiences', function (Blueprint $table) {
+            //
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->enum('marriage_status', ['married', 'unmarried'])->nullable();
+        Schema::table('experiences', function (Blueprint $table) {
+            //
         });
     }
 };

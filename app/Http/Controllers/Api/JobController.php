@@ -12,6 +12,9 @@ use Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
 
+use Illuminate\Support\Facades\DB;
+
+
 class JobController extends Controller
 {
      /**
@@ -36,6 +39,14 @@ class JobController extends Controller
         $jobpost->title = $request->title;
         $jobpost->description = $request->description;
         $jobpost->location = $request->location;
+        $jobpost->company_type = $request->company_type;
+        $jobpost->job_type = $request->job_type;
+        $jobpost->posted_within = $request->posted_within;
+        $jobpost->department = $request->department;
+        $jobpost->duration = $request->duration;
+        $jobpost->education = $request->education;
+        $jobpost->industry = $request->industry;
+        $jobpost->salary = $request->salary;
         $jobpost->user_id = $userid;
         $jobpost->save();
         return response()->json($jobpost);
@@ -45,10 +56,14 @@ class JobController extends Controller
     {
         $userid = Auth::user()->id;
         $user = User::find($userid);
-        $userJobPosts = $user->jobPosts;
+        $userJobPosts = $user->jobPosts()->distinct()->get();
         $userFavJob = $user->favouriteJob;
-        $job = JobPost::get();
-        return response()->json(['job'=>$job,'userJobPosts'=>$userJobPosts,'userFavJob'=>$userFavJob]);
+        $jobs = JobPost::with('postedby')->get();
+        return response()->json([
+            'job' => $jobs,              
+            'userJobPosts' => $userJobPosts,
+            'userFavJob' => $userFavJob    
+        ]);
     }
 
     public function getJobEmployer()

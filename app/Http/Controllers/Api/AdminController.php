@@ -87,7 +87,7 @@ class AdminController extends Controller
             $filename = time() . '_' . 'user_profile' . '.' . $extension;
             $destinationPath = public_path('uploads'); 
             $uploadedFile->move($destinationPath, $filename);
-            $updateData['imageurl'] = $filename; 
+            $updateData['profile_image'] = $filename; 
             $updateData['imagebaseurl'] = url('uploads/'); 
         }
     

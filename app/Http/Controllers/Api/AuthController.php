@@ -14,11 +14,6 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Project;
 use App\Models\Certificate;
-use App\Models\Country;
-use App\Models\State;
-use App\Models\City;
-use Dompdf\Dompdf;
-use Dompdf\Options;
 
 class AuthController extends Controller
 {
@@ -53,7 +48,6 @@ class AuthController extends Controller
                         'name' => $request->name,
                         'email' => $request->email,
                         'password' => Hash::make($request->password),
-                        'imageurl' => $request->imageurl,
                     ]
                 );
                 $save_user = User::where('email', $request->email)->first();
@@ -118,42 +112,6 @@ class AuthController extends Controller
         }
     }
 
-    // Start Login For Super Admin 
-
-    public function loginForSuperadmin(Request $request) 
-    {
-        try
-        {
-
-            $credentials = $request->only('email','password');
-
-                if (!$token = JWTAuth::attempt($credentials)) 
-                {
-                    return response()->json([
-                        'status' => 400,
-                        'message' => 'Unauthorized',
-                    ], 401);
-                }
-
-                $user = Auth::user();
-
-                return response()->json([
-                    'status' => 'success',
-                    'user' => $user,
-                    'authorisation' => [
-                        'token' => $token,
-                        'type' => 'bearer',
-                    ],
-                ]);
-
-        } 
-        catch (Exception $e) 
-        {
-            return $e->getMessage();
-        }
-    }
-
-    // End Login For Super Admin
 
     /**
      * Register a User.
@@ -180,268 +138,32 @@ class AuthController extends Controller
             'user' => $user
         ], 201);
     }
+    
+   /**
+    * Get the token array structure.
+    *
+    * @param  string $token
+    *
+    * @return \Illuminate\Http\JsonResponse
+    */
+   protected function createNewToken($token)
+   {
+       return response()->json([
+           'access_token' => $token,
+           'token_type' => 'bearer',
+           'user' => auth()->user()
+       ]);
+   }
 
     /**
      * Refresh a token.
      *
      * @return \Illuminate\Http\JsonResponse
      */
+
     public function refresh() 
     {
         return $this->createNewToken(auth()->refresh());
-    }
-    /**
-     * Get the authenticated User.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-
-     public function createProfile(Request $request) 
-     {
-         $userid = Auth::user()->id;
-         $user = User::find($userid);
-         if($request->role == 1)
-         {
-             $user->employee()->create([
-                     'employee_id' => $userid,
-             ]);
-
-             $user->role_id = 1;
-             $user->update();
-             $user = User::with('employee')->find($userid);
-         }
-         else
-         {
-             $user->employer()->create([
-                 'employer_id' => $userid,
-             ]);
-             $user->role_id = 2;
-             $user->update();
-             $user = User::find($userid);
-         }
-
-         return response()->json($user); 
-     }
-
-    public function userProfile() 
-    {
-        return response()->json(auth()->user());
-    }
-
-    public function updateProfile(Request $request) 
-    {
-        $userid = Auth::user()->id;
-        $user = User::find($userid);
-        $img_base_url = url('/').'/public/uploads/';
-
-        if($request->imageurl != '' || $request->imageurl != null)
-        {
-            $uploadedFile = $request->file('imageurl');
-
-            // Get the file extension
-            $extension = $uploadedFile->getClientOriginalExtension();
-            $filename = time() . '_' . 'user_profile' . '.' . $extension;
-            $destinationPath = public_path() . '/uploads';
-            $uploadedFile->move($destinationPath, $filename);
-            $user->imageurl = $filename;
-            $user->imagebaseurl = $img_base_url;
-        }
-
-
-        if($user->role_id == 1)
-        {
-            $user->update();
-            $user = User::with(['projects', 'employee', 'certificates'])->find($userid);
-        }
-        else
-        {
-            $user->update();
-            $user = User::with('employer')->find($userid);
-        }
-
-
-        return response()->json($user); 
-    }
-
-
-    public function updateEmployeeProfile(Request $request) 
-    {
-        // return response()->json($request->all());
-        $userId = Auth::id(); // Get the authenticated user's ID
-
-        // Update the user's attributes
-        User::where('id', $userId)->update([
-            'name' => $request->name
-        ]);
-
-        // Retrieve the user model instance
-        $user = User::find($userId);
-        
-
-        // Update the employee attributes if the user has an associated employee
-        if ($user) 
-        {
-            $user->employee()->update([
-                'marriage_status' => $request->marriage_status,
-                'phone' => $request->phone,
-                'current_address' => $request->current_address,
-                'permanent_address' => $request->permanent_address,
-                'adhar_card_no' => $request->adhar_card_no,
-                'qualification' => $request->qualification,
-                'certifications' => $request->certifications,
-                'skills' => $request->skills,
-                'working_from' => $request->working_from,
-                'work_experience' => $request->work_experience,
-                'current_working_skill' => $request->current_working_skill,
-                'languages' => $request->languages,
-                'hobbies' => $request->hobbies,
-                'city' => $request->city,
-                'state' => $request->state,
-                'country' => $request->country,
-                'pincode' => $request->pincode,
-                'gender' => $request->gender,
-                'company_name' => $request->company_name,
-                'responsibilities_and_achievements' => $request->responsibilities_and_achievements,
-                'Degree' => $request->Degree,
-                'university_or_collegeName' => $request->university_or_collegeName,
-                'graduation_date' => $request->graduation_date,
-                'coursework_or_academic_achievements' => $request->coursework_or_academic_achievements,
-                'dates_of_employment' => $request->dates_of_employment,
-                'location' => $request->location,
-                'job_title' => $request->job_title,
-                'professional_summary' => $request->professional_summary,
-                'linkedIn_profile' => $request->linkedIn_profile,
-                'proficiency_level_of_language' => $request->proficiency_level_of_language,
-                'References' => $request->References,
-
-
-            ]);
-        }
-
-       // Retrieve the payload from the request
-       $payload = $request->input('payload');
-
-       // Decode JSON payload to an array
-       $projects = json_decode($payload, true);
-
-       // Insert each project into the database
-       foreach ($projects as $projectData) 
-       {
-           Project::create([
-               'employee_id' => $userId,
-               'project_name' => $projectData['projectName'],
-               'brief_description' => $projectData['briefDescription'],
-               'role_and_contributions' => $projectData['roleAndContributions'],
-               'Technologies_used' => $projectData['technologiesUsed'],
-           ]);
-       }
-
-       $result = $request->input('result');
-
-       $certificates = json_decode($result, true);
-
-       foreach ($certificates as $certificateData) 
-       {
-        Certificate::create([
-               'employee_id' => $userId,
-               'certificate_name' => $certificateData['certificate_name'],
-               'date_of_certification' => $certificateData['date_of_certification'],
-               'issuing_organization' => $certificateData['issuing_organization'],
-           ]);
-       }
-
-        $user = User::with('employee','certificates', 'projects')->find($userId);
-
-        return response()->json($user);
-    }
-
-    public function updateEmployerProfile(Request $request) 
-    {
-        $userId = Auth::id(); // Get the authenticated user's ID
-
-        // Update the user's attributes
-        User::where('id', $userId)->update([
-            'name' => $request->name
-        ]);
-
-        // Retrieve the user model instance
-        $user = User::find($userId);
-
-        // Update the employee attributes if the user has an associated employee
-        if ($user) 
-        {
-            $user->employer()->update([
-                'phone' => $request->phone,
-                'current_address' => $request->current_address,
-                'permanent_address' => $request->permanent_address,
-                'adhar_card_no' => $request->adhar_card_no,
-                'qualification' => $request->qualification,
-                'certifications' => $request->certifications,
-                'skills' => $request->skills,
-                'working_from' => $request->working_from,
-                'work_experience' => $request->work_experience,
-                'current_working_skill' => $request->current_working_skill,
-                'languages' => $request->languages,
-                'hobbies' => $request->hobbies,
-                'city' => $request->city,
-                'state' => $request->state,
-                'country' => $request->country,
-                'pincode' => $request->pincode
-            ]);
-        }
-
-        $user = User::with('employer')->find($userId);
-
-        return response()->json($user);
-
-    }
-
-    public function emplyeePublicProfile($id)
-    {
-        $user = User::with('employee','projects','certificates')->find($id);
-        return response()->json($user);
-    }
-
-    public function generatepdf($id)
-    {
-        $user = User::where('id',$id)->with('employee','projects','certificates')->first();  
-    
-        $imageUrl = "https://staging.fyies.com/jobsite/backend/public/uploads/1723803210_user_profile.jpg";
-
-            //$imageUrl = $user->imagebaseurl ? $user->imagebaseurl . $user->imageurl : $user->imageurl;
-        
-            $imageData = file_get_contents($imageUrl);
-            $base64 = base64_encode($imageData);
-            $base64Image = 'data:image/jpeg;base64,' . $base64; // Adjust MIME type based on actual image type
-            //return view('pdf', ['user' => $user, 'imageUrl' => $base64Image]);
-            $html = view('pdf', ['user' => $user, 'imageUrl' => $base64Image])->render();
-            
-            $options = new Options();
-            $options->set('isHtml5ParserEnabled', true);
-            $options->set('isRemoteEnabled', true);
-            
-            $pdf = new Dompdf($options);
-            $pdf->loadHTML($html);
-            
-            $pdf->setPaper('A4', 'portrait'); // You can change the paper size and orientation here
-            $pdf->render();
-            
-          return $pdf->stream('user_profile.pdf', ['Attachment' => 1]);
-     }
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function createNewToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'user' => auth()->user()
-        ]);
     }
 
       /**

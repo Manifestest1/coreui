@@ -67,7 +67,7 @@ class ProjectController extends Controller
             'project_id' => 'required|exists:employees,id',
             'project_name' => 'required|string|max:255',
             'brief_description' => 'required|string',
-            'role_and_contributions' => 'required|string',
+            'role_of_employee' => 'required|string',
             'Technologies_used' => 'required|string',
         ]);
     }

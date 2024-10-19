@@ -168,7 +168,7 @@
 
                     <section class="summary-section">
                         <div class="sectionTitle">
-                            <p>Degree: <span class="spanStyle">{{ $user->employee->Degree }}</span></p>
+                            <p>Degree: <span class="spanStyle">{{ $user->employee->degree }}</span></p>
                         </div>
                     </section>
 
@@ -235,13 +235,13 @@
 
                             <div >
                                 <div class="sectionTitle">
-                                    <p>Roles and Contributions: <span class="spanStyle">{{ $project->role_and_contributions }}</span></p>
+                                    <p>Roles and Contributions: <span class="spanStyle">{{ $project->role_of_employee }}</span></p>
                                 </div>
                             </div>
 
                             <div >
                                 <div class="sectionTitle">
-                                    <p>Technologies Used: <span class="spanStyle">{{ $project->Technologies_used }}</p>
+                                    <p>Technologies Used: <span class="spanStyle">{{ $project->technologies_used }}</p>
                                 </div>
                             </div>
                         </div>
@@ -325,20 +325,8 @@
                             <p>Gender:  <span class="spanStyle">{{ $user->employee->gender }}</span></p>
                         </div>
                         <div class="sectionTitle">
-                            <p>Marital Status:  <span class="spanStyle">{{ $user->employee->marriage_status }}</span></p>
+                            <p>Marital Status:  <span class="spanStyle">{{ $user->employee->marital_status }}</span></p>
                         </div>
-                            <!-- <article>
-                                <p class="sectionTitle">Permanent Address :  </p><p class="sectionContent">{{ $user->employee->permanent_address }}</p>
-                                <p class="sectionTitle">LinkedIn Profile: </p><p class="sectionContent">{{ $user->employee->linkedIn_profile }}</p>
-                                <p class="sectionTitle">Adhar Card No:  </p><p class="sectionContent">{{ $user->employee->adhar_card_no }}</p>
-                                <p class="sectionTitle">Hobbies:  </p><p class="sectionContent">{{ $user->employee->hobbies }}</p>
-                                <p class="sectionTitle">City:  </p><p class="sectionContent">{{ $user->employee->city }}</p>
-                                <p class="sectionTitle">State:  </p><p class="sectionContent">{{ $user->employee->state }}</p>
-                                <p class="sectionTitle">Country:  </p><p class="sectionContent">{{ $user->employee->country }}</p>
-                                <p class="sectionTitle">Pin Code:  </p><p class="sectionContent">{{ $user->employee->pincode }}</p>
-                                <p class="sectionTitle">Gender:  </p><p class="sectionContent">{{ $user->employee->gender }}</p>
-                                <p class="sectionTitle">Marital Status:  </p><p class="sectionContent">{{ $user->employee->marriage_status }}</p>
-                            </article> -->
                         </div>
                         <div class="mainFooter "></div>
                     </section>        

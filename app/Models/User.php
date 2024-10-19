@@ -30,7 +30,7 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password',
         'google_id',
-        'imageurl'
+        'profile_image'
     ];
 
     /**
@@ -77,6 +77,16 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(Employee::class,'employee_id','id'); 
     }
 
+    public function experience()
+    {
+        return $this->hasMany(Experience::class,'user_id','id'); 
+    }
+
+    public function education()
+    {
+        return $this->hasMany(Education::class,'education_id','id'); 
+    }
+
     public function projects()
     {
         return $this->hasMany(Project::class,'employee_id','id'); 
@@ -90,5 +100,10 @@ class User extends Authenticatable implements JWTSubject
     public function employer()
     {
         return $this->hasOne(Employer::class,'employer_id','id'); 
+    }
+
+    public function jobs()
+    {
+        return $this->hasMany(JobPost::class, 'user_id','id'); // Assuming 'user_id' is the foreign key in the 'jobs' table
     }
 }

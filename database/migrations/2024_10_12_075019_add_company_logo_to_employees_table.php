@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pages', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->text('description');
-            $table->string('keywords')->nullable();
-            $table->timestamps();
+        Schema::table('employees', function (Blueprint $table) {
+            $table->string('company_logo')->nullable()->after('company_name'); 
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pages');
+        Schema::table('employees', function (Blueprint $table) {
+            $table->dropColumn('company_logo');
+        });
     }
-};  
+};

@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('employees', function (Blueprint $table) {
-            $table->enum('marriage_status', ['married', 'unmarried'])->nullable();
+        Schema::create('pages', function (Blueprint $table) {
+            $table->id();
+            $table->string('title')->nullable();
+            $table->string('url')->nullable();
+            $table->text('description')->nullable();
+            $table->string('keywords')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -21,8 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('employees', function (Blueprint $table) {
-            $table->dropColumn('marriage_status');
-        });
+        Schema::dropIfExists('pages');
     }
 };

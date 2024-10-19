@@ -11,8 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('certificates', function (Blueprint $table) {
+        Schema::create('certificates', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('employee_id');
+            $table->string('certifications');
+            $table->string('date_of_certification');
             $table->string('issuing_organization')->nullable();
+            $table->foreign('employee_id')->references('id')->on('users')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -22,7 +28,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('certificates', function (Blueprint $table) {
-            $table->dropColumn('issuing_organization'); 
+            //
         });
     }
 };
