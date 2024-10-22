@@ -17,7 +17,6 @@ class Employer extends Model
         'permanent_address', 
         'adhar_card_no',
         'qualification',
-        'certifications',
         'skills',
         'working_from',
         'work_experience',
