@@ -16,7 +16,8 @@ class Experience extends Model
         'working_from',
         'working_to',
         'location',
-        'responsibilities'
+        'responsibilities',
+        'user_id', 
     ];
 
     public function experienceOf() 

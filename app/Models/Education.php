@@ -18,6 +18,7 @@ class Education extends Model
         'to_year',
         'grading',
         'description',
+        'education_id'
     ];
 
     public function educationOf() 
