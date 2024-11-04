@@ -147,7 +147,7 @@ public function updateEmployeeProfile(Request $request)
             $filename = time() . '_user_profile.' . $extension;
             $destinationPath = public_path() . '/uploads';
             $uploadedFile->move($destinationPath, $filename);
-            $user->employee()->update(['company_logo' => $filename]); // Save company logo path
+            $user->employee()->update(['company_logo' => $filename]); 
         }
 
         $certificates = json_decode($request->input('result'), true);
@@ -175,29 +175,35 @@ public function updateEmployeeProfile(Request $request)
             ]);
         }
 
-        // Handle project images
         $projects = json_decode($request->input('payload'), true);
-        foreach ($projects as &$project_data) {
-            if (isset($project_data['company_image']) && $request->hasFile('company_image')) {
-                $uploadedFile = $request->file('company_image');
+
+        foreach ($projects as $index => &$project_data) {
+            // Check if an image file exists for the current project
+            if ($request->hasFile("company_image.$index")) { // Check for each image
+                $uploadedFile = $request->file("company_image.$index");
                 $extension = $uploadedFile->getClientOriginalExtension();
-                $filename = time() . '_' . uniqid() . '_project_image.' . $extension;
-                $destinationPath = public_path('uploads');
+                $filename = time() . '_user_profile_' . $index . '.' . $extension; // Use index for unique filename
+                $destinationPath = public_path() . '/uploads';
                 $uploadedFile->move($destinationPath, $filename);
-                $project_data['company_image'] = $filename;
+                $project_data['company_image'] = $filename; // Store filename
+            } else {
+                // If no image is uploaded, set company_image to null or an empty string
+                $project_data['company_image'] = null;
             }
         }
-
+        
         foreach ($projects as $project_data) {
             Project::create([
                 'employee_id' => $user_id,
                 'project_name' => $project_data['project_name'],
-                'company_image' => $project_data['company_image'],
+                'company_image' => $project_data['company_image'] ?? null, // Safely handle undefined 'company_image'
                 'brief_description' => $project_data['brief_description'],
                 'role_of_employee' => $project_data['role_of_employee'],
                 'technologies_used' => $project_data['technologies_used'],
             ]);
         }
+        
+
 
         // Handle experience images
         $experience_data = json_decode($request->input('experience_data'), true);
