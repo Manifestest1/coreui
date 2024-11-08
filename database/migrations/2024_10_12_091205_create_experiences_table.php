@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('experiences', function (Blueprint $table) {
             $table->id();
-            $table->string('company_image')->nullable();
+            $table->string('company_pic')->nullable();
             $table->string('company_name')->nullable();
             $table->string('role_of_employee')->nullable();
             $table->string('used_technology')->nullable();
