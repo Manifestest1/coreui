@@ -16,6 +16,8 @@ use App\Models\Project;
 use App\Models\Certificate;
 use App\Models\Education;
 use App\Models\Experience;
+use Illuminate\Support\Facades\Log;
+
 
 class ProfileController extends Controller
 {
@@ -137,16 +139,17 @@ class ProfileController extends Controller
                 'references' => $request->references,
             ];
     
-            $user->employee()->updateOrCreate(['employee_id' => $user_id], $employeeData);
-    
             if ($request->hasFile('company_logo')) {
                 $uploadedFile = $request->file('company_logo');
                 $extension = $uploadedFile->getClientOriginalExtension();
-                $filename = time() . '_user_profile.' . $extension;
-                $destinationPath = public_path() . '/uploads';
+                $filename = time() . '_user_profile_.' . $extension;
+                $destinationPath = public_path('uploads');
                 $uploadedFile->move($destinationPath, $filename);
-                $employeeData['company_logo'] = $filename;
+                $employeeData['company_logo'] =  $filename;
             }
+
+            $user->employee()->updateOrCreate(['employee_id' => $user_id], $employeeData);
+            
     
             $certificates = json_decode($request->input('certificate_data'), true);
             foreach ($certificates as $certificate_data) {
